@@ -187,45 +187,18 @@ switch ($_GET["op"]){
 
         $pedido = new PedidoCompra();
         $rspta = $pedido->listarDetalle($idpedido);
-
-        $cont = 0;
-        $total = 0;
-        $detalle = 0;
-        echo '<thead style="background-color:#A9D0F5">
-                <th>Opciones</th>
-                <th>Id</th>
-                <th>Mercaderia</th>
-                <th>Cantidad</th>
-                <th>Precio Compra</th>
-                <th>Subtotal</th>
-            </thead>';
-
+        $data = Array();
         while($reg = $rspta->fetch_object()){
-            echo '<tr class="filas" id="fila'.$cont.'>
-                    <td><button type="button" class="btn btn-info"></button></td>
-                    <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('.$cont.')">X</button></td>
-                    <td><input type="hidden" name="idmercaderia[]" value="'.$reg->idmercaderia.'">'.$reg->idmercaderia.'</td>
-                    <td><input type="hidden" name="descripcion[]" value="'.$reg->descripcion.'">'.$reg->descripcion.'</td>
-                    <td><input type="number" name="cantidad[]" value="'.$reg->cantidad.'"></td>
-                    <td><input type="hidden" name="preciocompra[]" value="'.$reg->preciocompra.'">'.$reg->preciocompra.'</td>
-                    <td><span name="subtotal" id="subtotal'.$reg->cantidad*$reg->preciocompra.'">'.$reg->cantidad*$reg->preciocompra.'</span></td>
-                    <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>
-                </tr>';
-                    $total=$total+($reg->preciocompra*$reg->cantidad);
-                    $cont++;
-                    $detalle = $detalle+1;
-                    $_SESSION['detalle'] = $detalle;
+            $data[]=array(
+                "0"=>$reg->idpedido,
+                "1"=>$reg->idmercaderia,
+                "2"=>$reg->descripcion,
+                "3"=>$reg->cantidad,
+                "4"=>$reg->preciocompra
+            );
         }
-
-        echo '<tfoot>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>TOTAL</th>
-                <th><h4 id="total">Gs/.'.$total.'</h4><input type="hidden" name="total_compra" id="total_compra" value="'.$total.'"></th>
-            </tfoot>
-            <div id="detalle" style="display:none" data-value="'.$_SESSION['detalle'].'"></div>';
+        echo json_encode($data);
+    
     break;
 
 

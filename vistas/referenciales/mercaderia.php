@@ -30,10 +30,10 @@ if(!isset($_SESSION["usuario"])){
                           <thead>
                             <th>Id</th>
                             <th>Descripcion</th>
-                            <th>Marca</th>
                             <th>Precio Compra</th>
                             <th>Precio Venta</th>
                             <th>Impuesto</th>
+                            <th>Stock</th>
                             <th>Imagen</th>
                             <th>Estado</th>
                             <th>Opciones</th>
@@ -43,10 +43,10 @@ if(!isset($_SESSION["usuario"])){
                           <tfoot>
                             <th>Id</th>
                             <th>Descripcion</th>
-                            <th>Marca</th>
                             <th>Precio Compra</th>
                             <th>Precio Venta</th>
                             <th>Impuesto</th>
+                            <th>Stock</th>
                             <th>Imagen</th>
                             <th>Estado</th>
                             <th>Opciones</th>

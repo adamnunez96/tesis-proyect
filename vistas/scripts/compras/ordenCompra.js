@@ -226,6 +226,24 @@ function anular(idorden){
     });
 }
 
+function agregarPedido(idpedido){
+
+    $.post("../../ajax/compras/ordenCompra.php?op=listarCabeceraPedido",{idpedido : idpedido}, function(data, status){
+        data = JSON.parse(data);
+        mostrarform(true);
+
+        $("#idpedido").val(data.idpedido);
+
+        //ocultar y mostrar los botones
+        $("#btnCancelar").show();
+
+    });
+    $.post("../../ajax/compras/ordenCompra.php/?op=listarDetallePedido&id="+idpedido, function(res){
+        let data = JSON.parse(res);
+        mostrarDetalle(data);
+    });
+}
+
 //declaracion de variables necesarias para trabajar con las compras y sus detalles
 
 // var impuesto=10;
@@ -237,8 +255,6 @@ $("#btnGuardar").hide();
 
 function agregarDetalle(idmercaderia, descripcion, preciocompra){
     var cantidad=1;
-    //var precio=1;
-    // var precio_venta=1;
 
     if(idmercaderia != ""){
         var subtotal=cantidad*preciocompra;
@@ -260,26 +276,25 @@ function agregarDetalle(idmercaderia, descripcion, preciocompra){
     }
 }
 
-function agregarPedido(idpedido){
-
-    $.post("../../ajax/compras/ordenCompra.php?op=listarCabeceraPedido",{idpedido : idpedido}, function(data, status){
-        data = JSON.parse(data);
-        mostrarform(true);
-
-        $("#idpedido").val(data.idpedido);
-
-        //ocultar y mostrar los botones
-        //$("#btnGuardar").show();
-        $("#btnCancelar").show();
-        //$("#btnAgregarArt").hide();
-    });
-    $.post("../../ajax/compras/ordenCompra.php/?op=listarDetallePedido&id="+idpedido, function(r){
-        $("#detalles").html(r);
-        console.log(r);
-        detalles = $('#detalle').data('value');
-        evaluar();
-    });
+function mostrarDetalle(data){
+    data.forEach(detalle =>{
+        var subtotal=detalle[3]*detalle[4];
+        var fila='<tr class="filas" id="fila'+cont+'">'+
+        '<td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('+cont+')">X</button></td>'+
+        '<td><input type="hidden" name="idmercaderia[]" value="'+detalle[1]+'">'+detalle[1]+'</td>'+
+        '<td><input type="hidden" name="descripcion[]" value="'+detalle[2]+'">'+detalle[2]+'</td>'+
+        '<td><input type="number" name="cantidad[]" style="width:80px" value="'+detalle[3]+'"></td>'+
+        '<td><input type="hidden" name="preciocompra[]" value="'+detalle[4]+'">'+detalle[4]+'</td>'+
+        '<td><span name="subtotal" id="subtotal'+cont+'">'+subtotal+'</span></td>'+
+        '<td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>'+
+        '</tr>';
+        cont++;
+        detalles=detalles+1;
+        $('#detalles').append(fila);
+        modificarSubtotales();
+    });  
 }
+
 
 function modificarSubtotales(){
     var cant = document.getElementsByName("cantidad[]");

@@ -161,33 +161,32 @@
                                 <th></th>
                                 <th></th>
                               </tfoot>
-                              <div id="detalle" style="display:none" data-value="<?php echo $_SESSION['detalle']; ?>"></div>
                             </table>
                           </div>
 
                           <!--este especio es para el calculo de los ivas-->
                           
-                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12 ivas">
                               <label>TOTAL sin IVA 5%:</label>
                               <input type="text" name="total_iva5" id="total_iva5" class="form-control text-center borde" placeholder="0" readonly>
                             </div>
-                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12 ivas">
                               <label>TOTAL sin IVA 10%:</label>
                               <input type="text" name="total_iva10" id="total_iva10" class="form-control text-center borde" placeholder="0" readonly>
                             </div>
-                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12 ivas">
                               <label>TOTAL EXENTA:</label>
                               <input type="text" name="total_exenta" id="total_exenta" class="form-control text-center borde" placeholder="0" readonly>
                             </div>
-                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12 ivas">
                               <label>Liq. IVA 5%:</label>
                               <input type="text" name="liq_iva5" id="liq_iva5" class="form-control text-center borde" placeholder="0" readonly>
                             </div>
-                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12 ivas">
                               <label>Liq. IVA 10%:</label>
                               <input type="text" name="liq_iva10" id="liq_iva10" class="form-control text-center borde" placeholder="0" readonly>
                             </div>
-                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                            <div class="form-group col-lg-2 col-md-2 col-sm-4 col-xs-12 ivas">
                                 <label>TOTAL: </label><h4 id="total" class="form-control borde text-center">Gs/.0.00</h4><input type="hidden" name="total_compra" id="total_compra">
                             </div>
                           

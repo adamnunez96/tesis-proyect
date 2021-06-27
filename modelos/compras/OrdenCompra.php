@@ -46,8 +46,8 @@ class OrdenCompra {
     }
 
     public function listarDetalle($idorden){
-        $sql = "SELECT ocd.idordencompra, ocd.idmercaderia, m.descripcion, ocd.cantidad, ocd.precio 
-        FROM orden_compras_detalle ocd JOIN mercaderias m ON ocd.idmercaderia = m.idmercaderia 
+        $sql = "SELECT ocd.idordencompra, ocd.idmercaderia, m.descripcion, ocd.cantidad, ocd.precio, ti.tipo AS iva
+        FROM orden_compras_detalle ocd JOIN mercaderias m ON ocd.idmercaderia = m.idmercaderia JOIN tipo_impuestos ti ON m.idtipoimpuesto = ti.idtipoimpuesto 
         WHERE idordencompra = '$idorden'";
         return ejecutarConsulta($sql);
     }

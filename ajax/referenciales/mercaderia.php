@@ -1,4 +1,8 @@
 <?php 
+
+if(strlen(session_id())<1)
+session_start();
+
 require_once "../../modelos/referenciales/Mercaderia.php";
 
 $mercaderia = new Mercaderia;
@@ -10,7 +14,7 @@ $idtipoimpuesto = isset($_POST["idtipoimpuesto"])? limpiarCadena($_POST["idtipoi
 $precioCompra = isset($_POST["precioCompra"])? limpiarCadena($_POST["precioCompra"]): "";
 $precioVenta = isset($_POST["precioVenta"])? limpiarCadena($_POST["precioVenta"]): "";
 $imagen = isset($_POST["imagen"])? limpiarCadena($_POST["imagen"]): "";
-
+$idsucursal = $_SESSION["idsucursal"];
 
 switch ($_GET["op"]){
     case 'guardaryeditar':
@@ -27,7 +31,7 @@ switch ($_GET["op"]){
         }
 
         if(empty($idmercaderia)){
-            $rspta = $mercaderia->insertar($idtipoimpuesto, $idmarca, $descripcion, $precioCompra, $precioVenta, $imagen);
+            $rspta = $mercaderia->insertar($idtipoimpuesto, $idmarca, $descripcion, $precioCompra, $precioVenta, $imagen, $idsucursal);
             echo $rspta ? "Mercaderia registrada" : "Mercaderia no se pudo registrar";
         }else{
             $rspta = $mercaderia->editar($idmercaderia, $idtipoimpuesto, $idmarca, $descripcion, $precioCompra, $precioVenta, $imagen);
@@ -62,10 +66,10 @@ switch ($_GET["op"]){
 
                 "0"=>$reg->idmercaderia,
                 "1"=>$reg->descripcion,
-                "2"=>$reg->marca,
-                "3"=>$reg->preciocompra,
-                "4"=>$reg->precioventa,
-                "5"=>$reg->impuesto,
+                "2"=>$reg->preciocompra,
+                "3"=>$reg->precioventa,
+                "4"=>$reg->impuesto,
+                "5"=>$reg->stock,
                 "6"=>"<img src='../../files/mercaderias/".$reg->imagen."' height='50px' width='50px'>",
                 "7"=>($reg->estado)?'<span class="label bg-green">Activado</span>':
                 '<span class="label bg-red">Desactivado</span>',

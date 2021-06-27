@@ -51,7 +51,9 @@ function limpiar(){
     $("#fecha_hora").val("");
     
     $(".filas").remove();
+    $(".resul").html("");
     $("#total").html("Gs./0.00");
+    $("#total2").html("");
     $("#total_iva5").val("0");
     $("#total_iva10").val("0");
     $("#total_exenta").val("0");
@@ -93,6 +95,7 @@ function mostrarform(flag){
         detalles=0;
         $("#btnAgregarArt").show();
         $("#btnAgregarPedido").show();
+        $(".ivas").show();
     }else{
         $("#listadoregistros").show();
         $("#formularioregistros").hide();
@@ -239,7 +242,6 @@ function mostrar(idcompra){
         $("#fecha_hora").val(data.fecha);
         $("#obs").val(data.obs);
         $("#montoTotal").val(data.monto);
-        
 
         //ocultar y mostrar los botones
         $("#btnGuardar").hide();
@@ -247,8 +249,29 @@ function mostrar(idcompra){
         $("#btnAgregarArt").hide();
         $("#btnAgregarPedido").hide();
     });
-    $.post("../../ajax/compras/facturaCompra.php/?op=listarDetalle&id="+idcompra, function(r){
-        $("#detalles").html(r);
+    $.post("../../ajax/compras/facturaCompra.php/?op=listarDetalle&id="+idcompra, function(res){
+        $(".ivas").hide();
+        $("#detalles").html(res);
+    });
+}
+
+function agregarOrden(idorden){
+
+    $.post("../../ajax/compras/facturaCompra.php?op=listarCabeceraOrdenCompra",{idorden : idorden}, function(data, status){
+        data = JSON.parse(data);
+        mostrarform(true);
+
+        $("#idorden").val(data.idordencompra);
+        $("#idproveedor").val(data.idproveedor);
+        $("#idproveedor").selectpicker('refresh');
+
+        //ocultar y mostrar los botones
+        $("#btnCancelar").show();
+
+    });
+    $.post("../../ajax/compras/facturaCompra.php/?op=listarDetalleOrdenCompra&id="+idorden, function(res){
+        let data = JSON.parse(res);
+        mostrarDetalle(data);
     });
 }
 
@@ -265,7 +288,6 @@ function anular(idcompra){
 
 //declaracion de variables necesarias para trabajar con las compras y sus detalles
 
-// var impuesto=10;
 var cont=0;
 var detalles=0;
 $("#guardar").hide();
@@ -325,34 +347,31 @@ function agregarDetalle(idmercaderia, descripcion, preciocompra, tipoimpuesto){
     }
 }
 
-function agregarOrden(idorden){
+function mostrarDetalle(data){
 
-    $.post("../../ajax/compras/ordenCompra.php?op=listarCabeceraOrdenCompra",{idorden : idorden}, function(data, status){
-        data = JSON.parse(data);
-        mostrarform(true);
-
-        $("#idorden").val(data.idordencompra);
-        $("#idproveedor").val(data.idproveedor);
-        $("#idproveedor").selectpicker('refresh');
-
-        //ocultar y mostrar los botones
-        //$("#btnGuardar").show();
-        $("#btnCancelar").show();
-        //$("#btnAgregarArt").hide();
-    });
-    $.post("../../ajax/compras/facturaCompra.php/?op=listarDetalleOrdenCompra&id="+idorden, function(r){
-        $("#detalles").html(r);
-        console.log(r);
-        detalles = $('#detalle').data('value');
-        evaluar();
-    });
+    data.forEach(detalle =>{
+        var subtotal=detalle[3]*detalle[4];
+        var fila='<tr class="filas" id="fila'+cont+'">'+
+        '<td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('+cont+')">X</button></td>'+
+        '<td><input type="hidden" name="idmercaderia[]" value="'+detalle[1]+'">'+detalle[1]+'</td>'+
+        '<td><input type="hidden" name="descripcion[]" value="'+detalle[2]+'">'+detalle[2]+'</td>'+
+        '<td><input type="number" name="cantidad[]" style="width:80px" value="'+detalle[3]+'"></td>'+
+        '<td><input type="hidden" name="preciocompra[]" value="'+detalle[4]+'">'+detalle[4]+'</td>'+
+        '<td><span class="iva[]" id="iva[]" data-value="'+detalle[5]+'">'+detalle[5]+'</span></td>'+
+        '<td><span name="subtotal" id="subtotal'+cont+'">'+subtotal+'</span></td>'+
+        '<td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>'+
+        '</tr>';
+        cont++;
+        detalles=detalles+1;
+        $('#detalles').append(fila);
+        modificarSubtotales();
+    });  
 }
 
 function modificarSubtotales(){
     var cant = document.getElementsByName("cantidad[]");
     var prec = document.getElementsByName("preciocompra[]");
     var sub = document.getElementsByName("subtotal");
-
 
     for (var i = 0; i < cant.length; i++) {
         var inpC=cant[i];
@@ -396,19 +415,19 @@ function calcularIva(){
         let inpI = iva[i];
 
         if(inpI.dataset.value == 10){
-            
             liq10 += (document.getElementsByName("subtotal")[i].value * 10)/100;
-            iva10 += document.getElementsByName("subtotal")[i].value - liq10;
+            iva10 += document.getElementsByName("subtotal")[i].value;
         }else if(inpI.dataset.value == 5){
             liq5 += (document.getElementsByName("subtotal")[i].value * 5)/100;
-            iva5 += document.getElementsByName("subtotal")[i].value - liq5;
+            iva5 += document.getElementsByName("subtotal")[i].value;
         }else{
             exenta += document.getElementsByName("subtotal")[i].value;
         }
     }
-    document.getElementById("total_iva10").value = iva10;
+
+    document.getElementById("total_iva10").value = iva10 - liq10;
     document.getElementById("liq_iva10").value = liq10;
-    document.getElementById("total_iva5").value = iva5;
+    document.getElementById("total_iva5").value = iva5 - liq5;
     document.getElementById("liq_iva5").value = liq5;
     document.getElementById("total_exenta").value = exenta;
     

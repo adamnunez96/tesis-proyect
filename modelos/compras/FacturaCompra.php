@@ -12,8 +12,8 @@ class Compra {
     public function insertar($idordencompra, $nrofactura, $idproveedor, $idpersonal, $idsucursal, $idformapago, $idtipodoc, $iddeposito, 
     $fecha_hora, $obs, $monto_compra, $idmercaderia, $cantidad, $precio, $total_exenta, $total_iva5, $total_iva10, $liq_iva5, $liq_iva10, $cuota){
 
-        $sql = "INSERT INTO compras (idordencompra, nrofactura, idproveedor, idpersonal, idsucursal, idformapago, idtipodocumento, iddeposito, fecha, obs, monto, estado) 
-        VALUES ('$idordencompra', '$nrofactura', '$idproveedor', '$idpersonal', '$idsucursal', '$idformapago', '$idtipodoc', '$iddeposito', '$fecha_hora', '$obs', '$monto_compra', '1')";
+        $sql = "INSERT INTO compras (idordencompra, nrofactura, idproveedor, idpersonal, idsucursal, idformapago, idtipodocumento, iddeposito, fecha, obs, monto, cuotas, estado) 
+        VALUES ('$idordencompra', '$nrofactura', '$idproveedor', '$idpersonal', '$idsucursal', '$idformapago', '$idtipodoc', '$iddeposito', '$fecha_hora', '$obs', '$monto_compra', '$cuota', '1')";
         
         $idcompranew = ejecutarConsulta_retornarID($sql);
 
@@ -24,7 +24,7 @@ class Compra {
 
             $sql_detalle = "INSERT INTO compras_detalle (idcompra, idmercaderia, cantidad, precio) 
             VALUES ('$idcompranew', '$idmercaderia[$num_elementos]', '$cantidad[$num_elementos]', '$precio[$num_elementos]')";
-            //ejecutarConsulta($sql_detalle) or $sw = false;
+            ejecutarConsulta($sql_detalle) or $sw = false;
 
             $num_elementos =$num_elementos + 1;
         }
@@ -97,9 +97,9 @@ class Compra {
     }
 
     public function listarDetalle($idcompra){
-        $sql = "SELECT cd.idcompra, cd.idmercaderia, m.descripcion, cd.cantidad, cd.precio 
-        FROM compras_detalle cd JOIN mercaderias m ON cd.idmercaderia = m.idmercaderia 
-        WHERE idcompra = '$idcompra'";
+        $sql = "SELECT cd.idcompra, cd.idmercaderia, m.descripcion, cd.cantidad, cd.precio, ti.tipo AS iva
+        FROM compras_detalle cd JOIN mercaderias m ON cd.idmercaderia = m.idmercaderia JOIN tipo_impuestos ti 
+        ON m.idtipoimpuesto = ti.idtipoimpuesto WHERE idcompra = '$idcompra'";
         return ejecutarConsulta($sql);
     }
 
@@ -120,30 +120,30 @@ class Compra {
         ejecutarConsulta($sql);
     }
 
-    //implementamos un metodo para insertar la compra en la tabla cuentas a pagar
-    public function insertarCuentasPagar($idproveedor, $nrofactura, $total_compra, $cuota, $idformapago, $fecha_hora){
+    // //implementamos un metodo para insertar la compra en la tabla cuentas a pagar
+    // public function insertarCuentasPagar($idproveedor, $nrofactura, $total_compra, $cuota, $idformapago, $fecha_hora){
 
-        if($idformapago == 1){
-            $formaPago = 'CONTADO';
-        }else{
-            $formaPago = 'CREDITO';
-        }
+    //     if($idformapago == 1){
+    //         $formaPago = 'CONTADO';
+    //     }else{
+    //         $formaPago = 'CREDITO';
+    //     }
 
-        $monto_cuota = $total_compra / $cuota;
+    //     $monto_cuota = $total_compra / $cuota;
 
-        for ($i=0; $i <= $cuota ; $i++) { 
+    //     for ($i=0; $i <= $cuota ; $i++) { 
 
-            $fecha_vto = date_add($fecha_hora, date_interval_create_from_date_string(" $i months"));
+    //         $fecha_vto = date_add($fecha_hora, date_interval_create_from_date_string(" $i months"));
 
-            $concepto = "Cuota Nro. ". $i ."/". $cuota ." ". $formaPago ." ". $cuota ."MESES";
+    //         $concepto = "Cuota Nro. ". $i ."/". $cuota ." ". $formaPago ." ". $cuota ."MESES";
 
-            $sql = "INSERT INTO cuentas_a_pagar VALUES (idcompra, idproveedor, nrofactura, idnotacredidebi, totalcuota, nrocuota, montocuota, fechavto, obs, estado) 
-            VALUES ('$this->idcompranew ', '$idproveedor', '$nrofactura', '0', '$cuota', '$i', '$monto_cuota', '$fecha_vto','$concepto', '1')";
+    //         $sql = "INSERT INTO cuentas_a_pagar VALUES (idcompra, idproveedor, nrofactura, idnotacredidebi, totalcuota, nrocuota, montocuota, fechavto, obs, estado) 
+    //         VALUES ('$this->idcompranew ', '$idproveedor', '$nrofactura', '0', '$cuota', '$i', '$monto_cuota', '$fecha_vto','$concepto', '1')";
 
-            ejecutarConsulta($sql);
+    //         ejecutarConsulta($sql);
 
-        }
-    }
+    //     }
+    // }
 
 }
 ?>

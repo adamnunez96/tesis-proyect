@@ -58,7 +58,6 @@ switch ($_GET["op"]){
 
     case 'listarDetalle':
         $idcompra = $_GET['id'];
-
         $rspta = $compra->listarDetalle($idcompra);
 
         $total = 0;
@@ -68,22 +67,40 @@ switch ($_GET["op"]){
                 <th>Id</th>
                 <th>Mercaderia</th>
                 <th>Cantidad</th>
-                <th>Precio Compra</th>
+                <th>Precio</th>
+                <th>Iva</th>
                 <th>Subtotal</th>
             </thead>';
 
         while($reg = $rspta->fetch_object()){
-            echo '<tr class="filas"><td></td><td>'.$reg->idmercaderia.'</td><td>'.$reg->descripcion.'</td><td>'.$reg->cantidad.'</td><td>'.$reg->precio.'</td><td>'.$reg->cantidad*$reg->precio.'</td></tr>';
+            $subtotal = $reg->cantidad*$reg->precio;
+            echo '<tr class="filas"><td></td><td>'.$reg->idmercaderia.'</td>
+            <td>'.$reg->descripcion.'</td>
+            <td>'.$reg->cantidad.'</td>
+            <td>'.$reg->precio.'</td>
+            <td>'.$reg->iva.'</td>
+            <td>'.$subtotal.'</td>
+            </tr>';
             $total=$total+($reg->precio*$reg->cantidad);
-        }
 
+            if($reg->iva == 5){
+                $iva5 += ($subtotal * 5)/100;
+            }else if($reg->iva == 10){
+                $iva10 += ($subtotal * 10)/100;
+            }else{
+                $exenta += $subtotal;
+            }
+        }
+        $total5 = $subtotal - $iva5;
+        $total10 = $subtotal - $iva10;
         echo '<tfoot>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
-                <th>TOTAL</th>
-                <th><h4 id="total">S/.'.$total.'</h4><input type="hidden" name="total_compra" id="total_compra"></th>
+                <th></th>
+                <th><span class="resul">IVA 5 Inc.<br>IVA 10 Inc.<br>TOTAL</span></th>
+                <th><span class="resul">'.$iva5.'<br>'.$iva10.'<br></span><h4 id="total2">Gs/.'.$total.'</h4><input type="hidden" name="total_compra" id="total_compra"></th>
             </tfoot>';
 
     break;
@@ -157,7 +174,7 @@ switch ($_GET["op"]){
 
         while($reg=$rspta->fetch_object()){
             $data[]=array(
-                "0"=>'<button class="btn btn-warning" onclick="agregarPedido('.$reg->idordencompra.')"><span class="fa fa-plus"></span></button>',
+                "0"=>'<button class="btn btn-warning" onclick="agregarOrden('.$reg->idordencompra.')"><span class="fa fa-plus"></span></button>',
                 "1"=>$reg->idordencompra,
                 "2"=>$reg->fecha,
                 "3"=>$reg->proveedor,
@@ -191,45 +208,18 @@ switch ($_GET["op"]){
 
         $orden = new OrdenCompra();
         $rspta = $orden->listarDetalle($idorden);
-
-        $cont = 0;
-        $total = 0;
-        $detalle = 0;
-        echo '<thead style="background-color:#A9D0F5">
-                <th>Opciones</th>
-                <th>Id</th>
-                <th>Mercaderia</th>
-                <th>Cantidad</th>
-                <th>Precio Compra</th>
-                <th>Subtotal</th>
-            </thead>';
-
+        $data = Array();
         while($reg = $rspta->fetch_object()){
-            echo '<tr class="filas" id="fila'.$cont.'>
-                    <td><button type="button" class="btn btn-info"></button></td>
-                    <td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('.$cont.')">X</button></td>
-                    <td><input type="hidden" name="idmercaderia[]" value="'.$reg->idmercaderia.'">'.$reg->idmercaderia.'</td>
-                    <td><input type="hidden" name="descripcion[]" value="'.$reg->descripcion.'">'.$reg->descripcion.'</td>
-                    <td><input type="number" name="cantidad[]" value="'.$reg->cantidad.'"></td>
-                    <td><input type="hidden" name="preciocompra[]" value="'.$reg->preciocompra.'">'.$reg->preciocompra.'</td>
-                    <td><span name="subtotal" id="subtotal'.$reg->cantidad*$reg->preciocompra.'">'.$reg->cantidad*$reg->preciocompra.'</span></td>
-                    <td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>
-                </tr>';
-                    $total=$total+($reg->preciocompra*$reg->cantidad);
-                    $cont++;
-                    $detalle = $detalle+1;
-                    $_SESSION['detalle'] = $detalle;
+            $data[]=array(
+                "0"=>$reg->idordencompra,
+                "1"=>$reg->idmercaderia,
+                "2"=>$reg->descripcion,
+                "3"=>$reg->cantidad,
+                "4"=>$reg->precio,
+                "5"=>$reg->iva
+            );
         }
-
-        echo '<tfoot>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>TOTAL</th>
-                <th><h4 id="total">Gs/.'.$total.'</h4><input type="hidden" name="total_compra" id="total_compra" value="'.$total.'"></th>
-            </tfoot>
-            <div id="detalle" style="display:none" data-value="'.$_SESSION['detalle'].'"></div>';
+        echo json_encode($data);
     break;
 
     case "selectProveedor": //Este debe ser un select que debe de mostrar los proveedores

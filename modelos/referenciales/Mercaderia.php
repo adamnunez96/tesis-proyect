@@ -9,9 +9,18 @@ class Mercaderia {
     }
 
     //implementamos un metodo para insertar registros
-    public function insertar($idtipoimpuesto, $idmarca, $descripcion, $precioCompra, $precioVenta, $imagen){
-        $sql = "INSERT INTO mercaderias (idtipoimpuesto, idmarca, descripcion, preciocompra, precioventa, imagen, estado) values ('$idtipoimpuesto', '$idmarca', '$descripcion', '$precioCompra', '$precioVenta', '$imagen', '1')";
-        return ejecutarConsulta($sql);
+    public function insertar($idtipoimpuesto, $idmarca, $descripcion, $precioCompra, $precioVenta, $imagen, $idsucursal){
+        $sql = "INSERT INTO mercaderias (idtipoimpuesto, idmarca, descripcion, preciocompra, precioventa, imagen, estado) 
+        values ('$idtipoimpuesto', '$idmarca', '$descripcion', '$precioCompra', '$precioVenta', '$imagen', '1')";
+
+        $band = true;
+        $idmerc = ejecutarConsulta_retornarID($sql);
+        // aca realizamos una insercion en la tabla stock del producto creado
+        
+        $sql2 = "INSERT INTO stock (idmercaderia, iddeposito, cantidad) VALUES ('$idmerc', '$idsucursal', 0)";
+        ejecutarConsulta($sql2) or $band = false;
+
+        return $band;
     }
 
     //implementamos un metodo para editar registros
@@ -40,8 +49,10 @@ class Mercaderia {
 
     //implementar un metodo para listar los registros
     public function listar(){
-        $sql = "SELECT mer.idmercaderia, mer.descripcion, mar.descripcion as marca, mer.preciocompra, mer.precioventa, ti.descripcion as impuesto, mer.imagen, mer.estado 
-        FROM mercaderias mer JOIN marcas mar ON mer.idmarca = mar.idmarca JOIN tipo_impuestos ti ON mer.idtipoimpuesto = ti.idtipoimpuesto";
+        $sql = "SELECT mer.idmercaderia, concat(mer.descripcion, ' - ', mar.descripcion) AS descripcion, mer.preciocompra, mer.precioventa, 
+        ti.descripcion AS impuesto, s.cantidad AS stock, mer.imagen, mer.estado 
+        FROM mercaderias mer JOIN marcas mar ON mer.idmarca = mar.idmarca JOIN tipo_impuestos ti ON mer.idtipoimpuesto = ti.idtipoimpuesto 
+        JOIN stock s ON mer.idmercaderia = s.idmercaderia";
         return ejecutarConsulta($sql);
     }
 
@@ -51,6 +62,5 @@ class Mercaderia {
         WHERE mer.estado = '1'";
         return ejecutarConsulta($sql);
     }
-
 }
 ?>
