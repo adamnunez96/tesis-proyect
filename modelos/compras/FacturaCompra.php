@@ -120,30 +120,5 @@ class Compra {
         ejecutarConsulta($sql);
     }
 
-    // //implementamos un metodo para insertar la compra en la tabla cuentas a pagar
-    // public function insertarCuentasPagar($idproveedor, $nrofactura, $total_compra, $cuota, $idformapago, $fecha_hora){
-
-    //     if($idformapago == 1){
-    //         $formaPago = 'CONTADO';
-    //     }else{
-    //         $formaPago = 'CREDITO';
-    //     }
-
-    //     $monto_cuota = $total_compra / $cuota;
-
-    //     for ($i=0; $i <= $cuota ; $i++) { 
-
-    //         $fecha_vto = date_add($fecha_hora, date_interval_create_from_date_string(" $i months"));
-
-    //         $concepto = "Cuota Nro. ". $i ."/". $cuota ." ". $formaPago ." ". $cuota ."MESES";
-
-    //         $sql = "INSERT INTO cuentas_a_pagar VALUES (idcompra, idproveedor, nrofactura, idnotacredidebi, totalcuota, nrocuota, montocuota, fechavto, obs, estado) 
-    //         VALUES ('$this->idcompranew ', '$idproveedor', '$nrofactura', '0', '$cuota', '$i', '$monto_cuota', '$fecha_vto','$concepto', '1')";
-
-    //         ejecutarConsulta($sql);
-
-    //     }
-    // }
-
 }
 ?>

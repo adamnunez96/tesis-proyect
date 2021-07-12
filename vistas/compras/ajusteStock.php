@@ -20,11 +20,7 @@
               <div class="col-md-12">
                   <div class="box">
                     <div class="box-header with-border">
-                          <h1 class="box-title">Orden Compra <button class="btn btn-success" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i>Nuevo</button><a data-toggle="modal" href="#myModal2">
-                              <button id="btnAgregarPedido" type="button" class="btn btn-primary"><span class="fa fa-plus"></span>
-                              Agregar Pedido
-                              </button>
-                            </a></h1>
+                          <h1 class="box-title">Ajuste Stock <button class="btn btn-success" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i>Nuevo</button></h1>
                         <div class="box-tools pull-right">
                         </div>
                     </div>
@@ -35,9 +31,9 @@
                           <thead>
                             <th>Id</th>
                             <th>Fecha</th>
-                            <th>Proveedor</th>
+                            <th>Tipo Ajuste</th>
                             <th>Personal</th>
-                            <th>Total</th>
+                            <th>Sucursal</th>
                             <th>Estado</th>
                             <th>Opciones</th>
                           </thead>
@@ -46,9 +42,9 @@
                           <tfoot>
                             <th>Id</th>
                             <th>Fecha</th>
-                            <th>Proveedor</th>
+                            <th>Tipo Ajuste</th>
                             <th>Personal</th>
-                            <th>Total</th>
+                            <th>Sucursal</th>
                             <th>Estado</th>
                             <th>Opciones</th>
                           </tfoot>
@@ -57,39 +53,41 @@
 
                     <div class="panel-body table-responsive"  id="formularioregistros">
                         <form name="formulario" id="formulario" method="POST">
-
-                          <div class="form-group col-lg-2 col-md-2 col-sm-6 col-xs-12">
-                            <label>idPedido:</label>
-                            <input type="text" name="idpedido" id="idpedido" class="form-control">
-                          </div>
                           
-                          <div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
-                            <label>Proveedor(*):</label>
-                            <input type="hidden" name="idorden" id="idorden">
-                            <select name="idproveedor" id="idproveedor" class="form-control selectpicker" data-live-search="true" required>
-                            </select>
+                          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Personal(*):</label>
+                            <input type="hidden" name="idajuste" id="idajuste">
+                            <input type="text" class="form-control" name="idpersonal" id="idpersonal" value="<?php echo $_SESSION['personal']; ?>" required readonly>
                           </div>
 
-                          <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <label>Fecha(*):</label>    
                             <input type="datetime-local" class="form-control" name="fecha_hora" id="fecha_hora" required="">
                           </div>
-
-                          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Personal(*):</label>
-                            <input type="text" class="form-control" name="personal" id="personal" value="<?php echo $_SESSION['personal']; ?>" required>
-                          </div>
-
+                        
                           <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <label>Sucursal(*):</label>
-                            <input type="text" class="form-control" name="sucursal" id="sucursal" value="<?php echo $_SESSION['sucursal']; ?>" required>
+                            <input type="text" class="form-control" name="idsucursal" id="idsucursal" value="<?php echo $_SESSION['sucursal']; ?>" required readonly>
                           </div>
+
+                          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Deposito(*):</label>
+                            <select name="iddeposito" id="iddeposito" class="form-control selectpicker" required>
+                            </select>
+                          </div>   
 
                           <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <label>Observacion:</label>
                             <input type="text" class="form-control" name="obs" id="obs" maxlenghth="100" placeholder="Observacion">
                           </div>
 
+                          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Tipo Ajuste(*):</label>
+                            <select name="tipo_ajuste" id="tipo_ajuste" class="form-control selectpicker" required>
+                                <option value="1">ENTRADA</option>
+                                <option value="0">SALIDA</option>
+                            </select>
+                          </div> 
                           
                           <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <a data-toggle="modal" href="#myModal">
@@ -155,7 +153,7 @@
                   <th>Id</th>
                   <th>Mercaderia</th>
                   <th>Marca</th>
-                  <th>Precio Compra</th>
+                  <th>Precio</th>
                   <th>Imagen</th>
                 </thead>
                 <tbody>
@@ -166,48 +164,8 @@
                   <th>Id</th>
                   <th>Mercaderia</th>
                   <th>Marca</th>
-                  <th>Precio Compra</th>
+                  <th>Precio</th>
                   <th>Imagen</th>
-                </tfoot>
-              </table>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-  <!--Fin Modal-->
-
-  <!--Modal Pedidos-->
-
-  <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">Seleccione Pedido de Compra</h4>
-            </div>
-            <div class="modal-body">
-              <table id="tblpedidos" class="table table-striped table-bordered table-condensed table-hover">
-                <thead>
-                  <th>Opciones</th>
-                  <th>Id</th>
-                  <th>Fecha</th>
-                  <th>Personal</th>
-                  <th>Sucursal</th>
-                </thead>
-                <tbody>
-                
-                </tbody>
-                <tfoot>
-                  <th>Opciones</th>
-                  <th>Id</th>
-                  <th>Fecha</th>
-                  <th>Personal</th>
-                  <th>Sucursal</th>
                 </tfoot>
               </table>
             </div>
@@ -227,7 +185,7 @@
 }
   require 'footer.php';
 ?>
-<script src="../scripts/compras/ordenCompra.js"></script>
+<script src="../scripts/compras/ajusteStock.js"></script>
 
 <?php
   }
