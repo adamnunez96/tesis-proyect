@@ -6,8 +6,6 @@ function init(){
         $("#sucursal").val('1');
         $("#sucursal").selectpicker('refresh');
     });
-    var ubi =window.location.href;
-    console.log(ubi);
 }
 
 let intentos = 1;
@@ -31,8 +29,8 @@ $("#frmAcceso").on('submit', function(e){
                     intentos=1;
                 }else{
                     intentos++;
-                    console.log(intentos);
-                    console.log(data);
+                    // console.log(intentos);
+                    // console.log(data);
                     bootbox.alert("Usuario y/o Password incorrectos");
                     $("#logina").val("");
                     $("#clavea").val("");

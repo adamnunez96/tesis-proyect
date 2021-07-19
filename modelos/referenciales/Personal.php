@@ -52,5 +52,12 @@ class Personal {
         return ejecutarConsulta($sql);
     }
 
+    public function listarActivos(){
+        $sql = "SELECT p.idpersonal, concat(p.nombre, ' ', p.apellido) AS personal, u.usuario, p.cargo, p.telefono, p.imagen, p.estado
+        FROM personales p JOIN usuarios u ON p.idusuario = u.idusuario JOIN ciudades c ON p.idciudad = c.idciudad 
+        WHERE p.estado = '1'";
+        return ejecutarConsulta($sql);
+    }
+
 }
 ?>
