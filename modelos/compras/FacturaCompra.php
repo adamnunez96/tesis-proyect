@@ -120,5 +120,13 @@ class Compra {
         ejecutarConsulta($sql);
     }
 
+    //implementar un metodo para listar los registros
+    public function listarActivos(){
+        $sql = "SELECT c.idcompra, c.nrofactura, date(c.fecha) as fecha, p.razonsocial AS proveedor, concat(per.nombre, ' ', per.apellido) AS personal, c.monto, c.estado 
+        FROM compras c JOIN proveedores p ON c.idproveedor = p.idproveedor JOIN personales per ON c.idpersonal = per.idpersonal WHERE c.estado = '1'
+        ORDER BY c.idcompra DESC";
+        return ejecutarConsulta($sql);
+    }
+
 }
 ?>

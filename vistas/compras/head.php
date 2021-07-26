@@ -166,7 +166,7 @@ session_start();
                             <li><a href="facturaCompra.php"><i class="fa fa-circle-o"></i> Facturas Compra</a></li>
                             <li><a href="ajusteStock.php"><i class="fa fa-circle-o"></i> Ajuste Stock</a></li>
                             <li><a href="notaRemision.php"><i class="fa fa-circle-o"></i> Nota Remision</a></li>
-                            <li><a href="notaCrediDebi.php"><i class="fa fa-circle-o"></i> Nota Credito/Debito</a></li>  
+                            <li><a href="notaCredito.php"><i class="fa fa-circle-o"></i> Nota Credito</a></li>  
                             <li><a href="libroCompra.php"><i class="fa fa-circle-o"></i> Libro Compras</a></li>                
                           </ul>
                         </li>';
