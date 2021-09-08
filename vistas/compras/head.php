@@ -39,9 +39,9 @@ session_start();
         <!-- Logo -->
         <a href="index2.html" class="logo">
           <!-- mini logo for sidebar mini 50x50 pixels -->
-          <span class="logo-mini"><b>IT</b>Ventas</span>
+          <span class="logo-mini"><b>Nuñez</b>Repuestos</span>
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg"><b>ITVentas</b></span>
+          <span class="logo-lg"><b>Nuñez Repuestos</b></span>
         </a>
 
         <!-- Header Navbar: style can be found in header.less -->
@@ -242,7 +242,7 @@ session_start();
                 }
               ?>  
 
-            <li>
+            <!--li class="invisible">
               <a href="#">
                 <i class="fa fa-plus-square"></i> <span>Ayuda</span>
                 <small class="label pull-right bg-red">PDF</small>
@@ -253,7 +253,7 @@ session_start();
                 <i class="fa fa-info-circle"></i> <span>Acerca De...</span>
                 <small class="label pull-right bg-yellow">IT</small>
               </a>
-            </li>
+            </li-->
                         
           </ul>
         </section>

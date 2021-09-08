@@ -44,5 +44,12 @@ class Cliente {
         return ejecutarConsulta($sql);
     }
 
+    public function listarActivos(){
+        $sql = "SELECT c.idcliente, concat(c.nombre, ' ', c.apellido) as cliente, c.ci, c.telefono, ciu.descripcion AS ciudad, c.direccion, c.correo, c.estado 
+        FROM clientes c JOIN ciudades ciu ON c.idciudad = ciu.idciudad 
+        WHERE c.estado = '1'";
+        return ejecutarConsulta($sql);
+    }
+
 }
 ?>

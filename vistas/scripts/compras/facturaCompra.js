@@ -323,10 +323,8 @@ let cuota = document.getElementById('cuota');
 
 function agregarDetalle(idmercaderia, descripcion, preciocompra, tipoimpuesto){
     var cantidad=1;
-    //var precio=1;
-    // var precio_venta=1;
-
     if(idmercaderia != ""){
+        
         var subtotal=cantidad*preciocompra;
         var fila='<tr class="filas" id="fila'+cont+'">'+
         '<td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('+cont+')">X</button></td>'+
@@ -340,11 +338,24 @@ function agregarDetalle(idmercaderia, descripcion, preciocompra, tipoimpuesto){
         '</tr>';
         cont++;
         detalles=detalles+1;
+        verificarExistencia(idmercaderia)
         $('#detalles').append(fila);
         modificarSubtotales();
+
+        
     }else{
         alert("error al ingresar el detalle, revisar los datos de la mercaderia");
     }
+}
+//ver esta funcion
+function verificarExistencia(idmercaderia){
+    let mercaderia = document.getElementsByName('idmercaderia[]');
+
+    for (let i = 0; i < mercaderia.length; i++) {
+        let element = mercaderia[i];
+        console.log(element.value);
+    }
+    
 }
 
 function mostrarDetalle(data){
@@ -444,7 +455,7 @@ function evaluar(){
 
 function eliminarDetalle(indice){
     $("#fila" + indice).remove();
-    calcularTotales()
+    calcularTotales();
     detalles = detalles-1;
     //console.log(detalles);
     evaluar();

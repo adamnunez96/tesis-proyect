@@ -28,7 +28,7 @@
                     </div>
                     <!-- /.box-header -->
                     <!-- centro -->
-                    <div class="panel-body">
+                    <div class="panel-body invisible">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             <div class="small-box bg-aqua">
                                 <div class="inner">
