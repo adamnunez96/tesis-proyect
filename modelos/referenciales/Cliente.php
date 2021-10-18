@@ -10,6 +10,7 @@ class Cliente {
 
     //implementamos un metodo para insertar registros
     public function insertar($idciudad, $ci, $nombre, $apellido, $direccion, $telefono, $correo){
+        
         $sql = "INSERT into clientes (idciudad, ci, nombre, apellido, direccion, telefono, correo, estado) values ('$idciudad', '$ci', '$nombre', '$apellido', '$direccion', '$telefono', '$correo', '1')";
         return ejecutarConsulta($sql);
     }
@@ -49,6 +50,17 @@ class Cliente {
         FROM clientes c JOIN ciudades ciu ON c.idciudad = ciu.idciudad 
         WHERE c.estado = '1'";
         return ejecutarConsulta($sql);
+    }
+
+    public function validarExistencia($idcliente, $ci, $nombre, $apellido){
+        $resul = null;
+        if(empty($idcliente)){ // aca va entrar en caso que sea un nuevo registro
+            $sql = "SELECT * from clientes where ci='$ci' and nombre = '$nombre' and apellido = '$apellido'";
+        }else{ //aca va entrar en caso que sea una actualizacion de un registro
+            $sql = "SELECT * from clientes where ci='$ci' and nombre = '$nombre' and apellido = '$apellido' and idcliente != '$idcliente'";
+        }
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
     }
 
 }

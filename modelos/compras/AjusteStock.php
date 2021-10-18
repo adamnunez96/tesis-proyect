@@ -109,10 +109,10 @@ class AjusteStock{
     }
 
     //implementar un metodo para listar los registros
-    public function listar(){
+    public function listar($idsucursal){
         $sql = "SELECT a.idajuste, date(a.fecha) AS fecha, concat(p.nombre, ' ', p.apellido) AS personal, s.descripcion AS sucursal, a.tipoajuste, a.estado 
         FROM ajustes a JOIN personales p ON a.idpersonal = p.idpersonal JOIN sucursales s ON a.idsucursal = s.idsucursal JOIN depositos d ON a.iddeposito = d.iddeposito
-        ORDER BY a.idajuste DESC";
+        WHERE a.idsucursal = '$idsucursal' ORDER BY a.idajuste DESC";
         return ejecutarConsulta($sql);
     }
 

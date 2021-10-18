@@ -63,10 +63,10 @@ class NotaCredito {
     }
 
     //implementar un metodo para listar los registros
-    public function listar(){
+    public function listar($idsucursal){
         $sql = "SELECT nc.idnotacredidebi, nc.nro_nota_credito_debito, date(nc.fecha) as fecha, nc.idcompra, p.razonsocial AS proveedor, concat(per.nombre, ' ', per.apellido) AS personal, nc.monto, nc.estado 
         FROM nota_credito_debito_compra nc JOIN proveedores p ON nc.idproveedor = p.idproveedor JOIN personales per ON nc.idpersonal = per.idpersonal 
-        ORDER BY nc.idcompra DESC";
+        WHERE nc.idsucursal = '$idsucursal' ORDER BY nc.idcompra DESC";
         return ejecutarConsulta($sql);
     }
 

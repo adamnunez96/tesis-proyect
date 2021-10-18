@@ -237,10 +237,10 @@ $("#guardar").hide();
 $("#btnGuardar").hide();
 
 //funciona para desactivar registros
-function anular(iddiagnostico){
+function anular(iddiagnostico, idrecepcion){
     bootbox.confirm("Estas Seguro de anular la Orden de Compra?", function(result){
         if(result){
-            $.post("../../ajax/servicios/diagnostico.php?op=anular", {iddiagnostico : iddiagnostico}, function(e){
+            $.post("../../ajax/servicios/diagnostico.php?op=anular", {iddiagnostico : iddiagnostico, idrecepcion:idrecepcion}, function(e){
                 tabla.ajax.reload();
             });    
         }

@@ -41,15 +41,23 @@ class Vehiculo {
 
     //implementar un metodo para listar los registros
     public function listar(){
-        $sql = "SELECT v.idvehiculo, v.modelo, m.descripcion AS marca, v.chapa, v.observacion, v.anho, v.estado FROM vehiculos v JOIN marcas m ON v.idmarca = m.idmarca";
+        $sql = "SELECT v.idvehiculo, v.modelo, m.descripcion AS marca, v.chapa, v.observacion, v.anho, v.estado 
+        FROM vehiculos v JOIN marcas m ON v.idmarca = m.idmarca";
         return ejecutarConsulta($sql);
     }
 
     //implementar un metodo para listar los registros
     public function listarActivos(){
-        $sql = "SELECT v.idvehiculo, concat(m.descripcion, ' - ' ,v.modelo) AS vehiculo, v.chapa, v.observacion, v.anho, v.estado FROM vehiculos v JOIN marcas m ON v.idmarca = m.idmarca 
+        $sql = "SELECT v.idvehiculo, concat(m.descripcion, ' - ' ,v.modelo) AS vehiculo, v.chapa, v.observacion, v.anho, v.estado 
+        FROM vehiculos v JOIN marcas m ON v.idmarca = m.idmarca 
         WHERE v.estado = '1'";
         return ejecutarConsulta($sql);
+    }
+
+    public function validarExistencia($idmarca, $modelo, $chapa){
+        $sql = "SELECT * from vehiculos where modelo = '$modelo' and chapa = '$chapa' and idmarca = '$idmarca'";
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
     }
 
 }

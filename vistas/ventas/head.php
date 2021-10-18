@@ -28,6 +28,8 @@
     <link rel="stylesheet" href="../../public/datatables/buttons.dataTables.min.css">
     <link rel="stylesheet" href="../../public/datatables/responsive.dataTables.min.css">
     <link rel="stylesheet" href="../../public/css/bootstrap-select.min.css">
+    <!--mi hoja de estilo-->
+    <link rel="stylesheet" href="../../public/css/style.css">
   </head>
   <body class="hold-transition skin-blue-light sidebar-mini">
     <div class="wrapper">

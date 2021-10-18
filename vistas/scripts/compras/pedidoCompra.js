@@ -194,17 +194,28 @@ $("#btnGuardar").hide();
 
 function agregarDetalle(idmercaderia, descripcion){
     var cantidad=1;
-    // var precio_compra=1;
-    // var precio_venta=1;
+    var detalleFinal = {};
+    const objDetalle = {
+        idmercaderia : idmercaderia,
+        descripcion : descripcion
+    }
+    if(cont <= 0){
+        detalleFinal.idmercaderia = objDetalle.idmercaderia;
+        detalleFinal.descripcion = objDetalle.descripcion;
+    }else{
+        detalleFinal = validarDetalle(objDetalle);
+    }
+    
 
-    if(idmercaderia != ""){
+    if(detalleFinal != "" || detalleFinal != null){
         //var subtotal=cantidad*precio_compra;
         var fila='<tr class="filas" id="fila'+cont+'">'+
         '<td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('+cont+')">X</button></td>'+
-        '<td><input type="hidden" name="idmercaderia[]" value="'+idmercaderia+'">'+idmercaderia+'</td>'+
-        '<td><input type="hidden" name="descripcion[]" value="'+descripcion+'">'+descripcion+'</td>'+
-        '<td><input type="number" name="cantidad[]" id="cantidad[]" value="'+cantidad+'"></td>'+
+        '<td><input type="hidden" name="idmercaderia" value="'+detalleFinal.idmercaderia+'">'+detalleFinal.idmercaderia+'</td>'+
+        '<td><input type="hidden" name="descripcion"  value="'+detalleFinal.descripcion+'">'+detalleFinal.descripcion+'</td>'+
+        '<td><input type="number" name="cantidad" id="cantidad" min="1" pattern="^[0-9]+" value="'+cantidad+'"></td>'+
         '</tr>';
+        //detalleFinal.cantidad = document.getElementById("cantidad");
         cont++;
         detalles=detalles+1;
         $('#detalles').append(fila);
@@ -214,6 +225,35 @@ function agregarDetalle(idmercaderia, descripcion){
     }
 }
 
+
+function validarDetalle(objDetalle){
+    let detalles={
+        idmercaderia: document.getElementsByName("idmercaderia"),
+        descripcion: document.getElementsByName("descripcion"),
+        cantidad : document.getElementById("cantidad")
+    }
+    let array = Array.from(detalles);
+    const resultado = array.find((detalle)=>{
+        if(+detalle.idmercaderia === +objDetalle.idmercaderia){
+            return detalle;
+        }
+    })
+
+    if(resultado){
+        array = array.map((detalle)=>{
+            if(+detalle.idmercaderia === +objDetalle.idmercaderia){
+                return {
+                    idmercaderia: detalle.idmercaderia,
+                    descripcion: detalle.descripcion,
+                    cantidad : +detalle.cantidad + 1
+                };
+            }
+        });
+    }else{
+        return array.push(objDetalle);
+    }
+
+};
 
 function evaluar(){
     if(detalles>0){

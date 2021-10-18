@@ -126,7 +126,7 @@ function mostrar(idusuario){
 
 //funcion para desactivar registros
 function desactivar(idusuario){
-    bootbox.confirm("Estas Seguro de desactivar el Usuario?", function(result){
+    bootbox.confirm("Esta Seguro de desactivar el Usuario?", function(result){
         if(result){
             $.post("../../ajax/referenciales/usuario.php?op=desactivar", {idusuario : idusuario}, function(e){
                 tabla.ajax.reload();
@@ -137,7 +137,7 @@ function desactivar(idusuario){
 
 //funciona para activar registros
 function activar(idusuario){
-    bootbox.confirm("Estas Seguro de activar el Usuario?", function(result){
+    bootbox.confirm("Esta Seguro de activar el Usuario?", function(result){
         if(result){
             $.post("../../ajax/referenciales/usuario.php?op=activar", {idusuario : idusuario}, function(e){
                 tabla.ajax.reload();

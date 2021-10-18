@@ -10,37 +10,42 @@ class Presupuesto {
 
     //implementamos un metodo para insertar registros
     public function insertar($iddiagnostico, $idcliente, $idpersonal, $idsucursal, $fecha_hora, $obs, $idvehiculo, $idmercaderia, $cantidad, $precio){
-            $sql = "INSERT INTO presupuestos_servicios (iddiagnostico, idcliente, idpersonal, idsucursal ,fecha, obs, estado) 
-            VALUES ('$iddiagnostico', '$idcliente', '$idpersonal', '$idsucursal', '$fecha_hora', '$obs', '1')";
-            $idPresupuestoNew = ejecutarConsulta_retornarID($sql);
+        $sql = "INSERT INTO presupuestos_servicios (iddiagnostico, idcliente, idpersonal, idsucursal ,fecha, obs, estado) 
+        VALUES ('$iddiagnostico', '$idcliente', '$idpersonal', '$idsucursal', '$fecha_hora', '$obs', '1')";
+        $idPresupuestoNew = ejecutarConsulta_retornarID($sql);
 
-            $band = true;
-            $i = 0;
+        $band = true;
+        $i = 0;
 
-            while($i < count($idvehiculo)){
-                $sql_vehiculo = "INSERT INTO presupuesto_servicio_detalle (idpresupuestoservicio, idvehiculo) 
-                VALUES ('$idPresupuestoNew', '$idvehiculo[$i]')";
-                ejecutarConsulta($sql_vehiculo);
+        while($i < count($idvehiculo)){
+            $sql_vehiculo = "INSERT INTO presupuesto_servicio_detalle (idpresupuestoservicio, idvehiculo) 
+            VALUES ('$idPresupuestoNew', '$idvehiculo[$i]')";
+            ejecutarConsulta($sql_vehiculo);
 
-                $i++;
-            }
+            $i++;
+        }
 
-            $j = 0;
-            while($j < count($idmercaderia)){
-                $sql_mercaderia = "INSERT INTO presupuesto_servicio_detalle (idpresupuestoservicio, idvehiculo, idmercaderia, cantidad, precio) 
-                VALUES ('$idPresupuestoNew', '$idvehiculo[$j]', '$idmercaderia[$j]', '$cantidad[$j]', '$precio[$j]')";
-                ejecutarConsulta($sql_mercaderia) or $sw = false;
+        $j = 0;
+        while($j < count($idmercaderia)){
+            $sql_mercaderia = "INSERT INTO presupuesto_servicio_detalle (idpresupuestoservicio, idvehiculo, idmercaderia, cantidad, precio) 
+            VALUES ('$idPresupuestoNew', '$idvehiculo[$j]', '$idmercaderia[$j]', '$cantidad[$j]', '$precio[$j]')";
+            ejecutarConsulta($sql_mercaderia) or $sw = false;
 
-                $j++;
-            }
+            $j++;
+        }
 
-            return $band;
+        $sql2 = "UPDATE diagnosticos SET estado = '2' WHERE iddiagnostico = '$iddiagnostico'";
+        ejecutarConsulta($sql2);
+
+        return $band;
         
     }
 
     //implementamos un metodo para anular
-    public function anular($idpresupuesto){
+    public function anular($idpresupuesto, $iddiagnostico){
         $sql = "UPDATE presupuestos_servicios SET estado='0' WHERE idpresupuestoservicio = '$idpresupuesto'";
+        $sql2 = "UPDATE diagnosticos SET estado = '1' WHERE iddiagnostico = '$iddiagnostico'";
+        ejecutarConsulta($sql2);
         return ejecutarConsulta($sql);
     }
 
@@ -62,7 +67,7 @@ class Presupuesto {
 
     //implementar un metodo para listar los registros
     public function listar(){
-        $sql = "SELECT ps.idpresupuestoservicio, date(ps.fecha) AS fecha, concat(c.nombre, ' ', c.apellido) AS cliente, concat(p.nombre, ' ', p.apellido) AS personal, ps.estado 
+        $sql = "SELECT ps.idpresupuestoservicio, ps.iddiagnostico, date(ps.fecha) AS fecha, concat(c.nombre, ' ', c.apellido) AS cliente, concat(p.nombre, ' ', p.apellido) AS personal, ps.estado 
         FROM presupuestos_servicios ps JOIN clientes c ON ps.idcliente = c.idcliente JOIN personales p ON ps.idpersonal = p.idpersonal JOIN sucursales s ON ps.idsucursal = s.idsucursal 
         ORDER BY ps.idpresupuestoservicio DESC";
         return ejecutarConsulta($sql);

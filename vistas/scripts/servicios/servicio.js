@@ -272,10 +272,10 @@ $("#guardar").hide();
 $("#btnGuardar").hide();
 
 //funciona para desactivar registros
-function anular(idservicio){
+function anular(idservicio, idordentrabajo){
     bootbox.confirm("Estas Seguro de anular el servicio?", function(result){
         if(result){
-            $.post("../../ajax/servicios/servicio.php?op=anular", {idservicio : idservicio}, function(e){
+            $.post("../../ajax/servicios/servicio.php?op=anular", {idservicio:idservicio, idordentrabajo:idordentrabajo}, function(e){
                 tabla.ajax.reload();
             });    
         }

@@ -268,10 +268,10 @@ $("#guardar").hide();
 $("#btnGuardar").hide();
 
 //funciona para desactivar registros
-function anular(idorden){
+function anular(idorden, idpresupuestoservicio){
     bootbox.confirm("Estas Seguro de anular el Presupuesto?", function(result){
         if(result){
-            $.post("../../ajax/servicios/ordenTrabajo.php?op=anular", {idorden : idorden}, function(e){
+            $.post("../../ajax/servicios/ordenTrabajo.php?op=anular", {idorden : idorden, idpresupuestoservicio:idpresupuestoservicio}, function(e){
                 tabla.ajax.reload();
             });    
         }

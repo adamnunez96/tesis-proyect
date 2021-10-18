@@ -15,11 +15,21 @@ $correo = isset($_POST["correo"])? limpiarCadena($_POST["correo"]): "";
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($idproveedor)){
-            $rspta = $proveedor->insertar($idciudad, $razonSocial, $ruc, $direccion, $telefono, $correo);
-            echo $rspta ? "Proveedor registrado" : "Proveedor no se pudo registrar";
+            $existencia = $proveedor->validarExistencia($idproveedor, $razonSocial, $ruc);
+            if($existencia > 0){
+                echo "Ya existe un Proveedor con estos datos. Favor verificar";
+            }else{
+                $rspta = $proveedor->insertar($idciudad, $razonSocial, $ruc, $direccion, $telefono, $correo);
+                echo $rspta ? "Proveedor registrado" : "Proveedor no se pudo registrar";
+            }
         }else{
-            $rspta = $proveedor->editar($idproveedor, $idciudad, $razonSocial, $ruc, $direccion, $telefono, $correo);
-            echo $rspta ? "Deposito actualizado" : "Deposito no se pudo actualizar";
+            $existencia = $proveedor->validarExistencia($idproveedor, $razonSocial, $ruc);
+            if($existencia > 0){
+                echo "Ya existe un Proveedor con estos datos. Favor verificar";
+            }else{
+                $rspta = $proveedor->editar($idproveedor, $idciudad, $razonSocial, $ruc, $direccion, $telefono, $correo);
+                echo $rspta ? "Deposito actualizado" : "Deposito no se pudo actualizar";
+            }
         }
     break;
 
@@ -75,7 +85,7 @@ switch ($_GET["op"]){
         require_once "../../modelos/referenciales/Ciudad.php";
 
         $ciudad = new Ciudad();
-        $rspta = $ciudad->listar();
+        $rspta = $ciudad->listarActivos();
 
         while($reg = $rspta->fetch_object()){
             echo '<option value =' . $reg->idciudad. '>' . $reg->descripcion . '</option>';

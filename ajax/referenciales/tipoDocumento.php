@@ -9,11 +9,21 @@ $descripcion = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($idtipodocumento)){
-            $rspta = $tipoDocumento->insertar($descripcion);
-            echo $rspta ? "Tipo Documento registrado" : "Tipo Documento no se pudo registrar";
+            $existencia = $tipoDocumento->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $tipoDocumento->insertar($descripcion);
+                echo $rspta ? "Tipo Documento registrado" : "Tipo Documento no se pudo registrar";
+            }
         }else{
-            $rspta = $tipoDocumento->editar($idtipodocumento, $descripcion);
-            echo $rspta ? "Tipo Documento actualizado" : "Tipo Documento no se pudo actualizar";
+            $existencia = $tipoDocumento->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $tipoDocumento->editar($idtipodocumento, $descripcion);
+                echo $rspta ? "Tipo Documento actualizado" : "Tipo Documento no se pudo actualizar";
+            }
         }
     break;
 

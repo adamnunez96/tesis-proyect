@@ -276,10 +276,10 @@ function agregarOrden(idorden){
 }
 
 //funciona para desactivar registros
-function anular(idcompra){
+function anular(idcompra, idorden){
     bootbox.confirm("Estas Seguro de anular la Factura de Compra?", function(result){
         if(result){
-            $.post("../../ajax/compras/facturaCompra.php?op=anular", {idcompra : idcompra}, function(e){
+            $.post("../../ajax/compras/facturaCompra.php?op=anular", {idcompra : idcompra, idorden:idorden}, function(e){
                 tabla.ajax.reload();
             });
         }
@@ -330,7 +330,7 @@ function agregarDetalle(idmercaderia, descripcion, preciocompra, tipoimpuesto){
         '<td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('+cont+')">X</button></td>'+
         '<td><input type="hidden" name="idmercaderia[]" value="'+idmercaderia+'">'+idmercaderia+'</td>'+
         '<td><input type="hidden" name="descripcion[]" value="'+descripcion+'">'+descripcion+'</td>'+
-        '<td><input type="number" name="cantidad[]" id="cantidad[]" style="width:80px" value="'+cantidad+'"></td>'+
+        '<td><input type="number" name="cantidad[]" id="cantidad[]" style="width:80px" min="1" pattern="^[0-9]+" value="'+cantidad+'"></td>'+
         '<td><input type="hidden" name="preciocompra[]" id="preciocompra[]" value="'+preciocompra+'">'+preciocompra+'</td>'+
         '<td><span class="iva[]" id="iva[]" data-value="'+tipoimpuesto+'">'+tipoimpuesto+'</span></td>'+
         '<td><span name="subtotal" id="subtotal'+cont+'">'+subtotal+'</span></td>'+
@@ -366,7 +366,7 @@ function mostrarDetalle(data){
         '<td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('+cont+')">X</button></td>'+
         '<td><input type="hidden" name="idmercaderia[]" value="'+detalle[1]+'">'+detalle[1]+'</td>'+
         '<td><input type="hidden" name="descripcion[]" value="'+detalle[2]+'">'+detalle[2]+'</td>'+
-        '<td><input type="number" name="cantidad[]" style="width:80px" value="'+detalle[3]+'"></td>'+
+        '<td><input type="number" name="cantidad[]" style="width:80px" min="1" pattern="^[0-9]+" value="'+detalle[3]+'"></td>'+
         '<td><input type="hidden" name="preciocompra[]" value="'+detalle[4]+'">'+detalle[4]+'</td>'+
         '<td><span class="iva[]" id="iva[]" data-value="'+detalle[5]+'">'+detalle[5]+'</span></td>'+
         '<td><span name="subtotal" id="subtotal'+cont+'">'+subtotal+'</span></td>'+

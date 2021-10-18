@@ -121,10 +121,21 @@ function eliminar(iddeposito){
     })
 }
 
-function mayuscula(e){
+//funciona para activar registros
+function activar(iddeposito){
+    bootbox.confirm("Estas seguro de activar la Sucursal?", function(result){
+        if(result){
+            $.post("../../ajax/referenciales/deposito.php?op=activar", {iddeposito : iddeposito}, function(e){
+                tabla.ajax.reload();
+            });
+                
+            
+        }
+    })
+}
 
+function mayuscula(e){
     e.value = e.value.toUpperCase();
-    
 }
 
 init();

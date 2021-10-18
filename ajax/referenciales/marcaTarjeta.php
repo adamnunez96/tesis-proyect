@@ -9,11 +9,21 @@ $descripcion = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($idmarcatarjeta)){
-            $rspta = $marcaTarjeta->insertar($descripcion);
-            echo $rspta ? "Marca de Tarjeta registrada" : "Marca de Tarjeta no se pudo registrar";
+            $existencia = $marcaTarjeta->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $marcaTarjeta->insertar($descripcion);
+                echo $rspta ? "Marca de Tarjeta registrada" : "Marca de Tarjeta no se pudo registrar";
+            }
         }else{
-            $rspta = $marcaTarjeta->editar($idmarcatarjeta, $descripcion);
-            echo $rspta ? "Marca de Tarjeta actualizada" : "Marca de Tarjeta no se pudo actualizar";
+            $existencia = $marcaTarjeta->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $marcaTarjeta->editar($idmarcatarjeta, $descripcion);
+                echo $rspta ? "Marca de Tarjeta actualizada" : "Marca de Tarjeta no se pudo actualizar";
+            }
         }
     break;
 

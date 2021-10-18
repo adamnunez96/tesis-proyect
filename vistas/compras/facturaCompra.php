@@ -108,7 +108,7 @@
                           </div>
 
                           <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <label>Forma de Pago(*):</label>
+                            <label>Condicion(*):</label>
                             <select name="idformapago" id="idformapago" class="form-control selectpicker" required>
                             </select>
                           </div>

@@ -38,5 +38,11 @@ class Tarjeta {
         return ejecutarConsulta($sql);
     }
 
+    public function validarExistencia($idMarcaTarjeta, $idEntidadEmisora, $descripcion){
+        $sql = "SELECT * from tarjetas where descripcion = '$descripcion' and idmarcatarjeta = '$idMarcaTarjeta' and identidademisora = '$idEntidadEmisora'";
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
+    }
+
 }
 ?>

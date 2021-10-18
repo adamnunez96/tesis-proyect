@@ -76,6 +76,7 @@
                             <select name="motivo" id="motivo" class="form-control selectpicker">
                               <option value="RECEPCION">RECEPCION</option>
                               <option value="RECLAMO">RECLAMO</option>
+                              <option value="ENTREGA">REGISTRO ENTREGA</option>
                             </select>
                           </div>
                           

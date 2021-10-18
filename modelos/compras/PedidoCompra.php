@@ -1,13 +1,18 @@
 <?php 
+
+// if(strlen(session_id())<1)
+// session_start();
+
 //incluimos inicialmente la conexion a la base de datos
 require "../../config/conexion.php";
+
 
 class PedidoCompra {
     //implementamos nuestro constructor
     public function __construct(){
 
     }
-
+ 
     //implementamos un metodo para insertar registros
     public function insertar($idsucursal, $idpersonal, $fecha_hora, $observacion, $idmercaderia, $cantidad){
 
@@ -51,10 +56,12 @@ class PedidoCompra {
     }
 
     //implementar un metodo para listar los registros
-    public function listar(){
+    public function listar($idsucursal){
+        //$sucursal = $_SESSION["idsucursal"];
+        //print_r($sucursal);
         $sql = "SELECT pc.idpedido, date(pc.fecha) AS fecha, concat(p.nombre, ' ', p.apellido) AS personal, s.descripcion AS sucursal, pc.estado 
         FROM pedido_compra pc JOIN personales p ON pc.idpersonal = p.idpersonal JOIN sucursales s ON pc.idsucursal = s.idsucursal 
-        ORDER BY pc.idpedido DESC";
+        WHERE pc.idsucursal = '$idsucursal' ORDER BY pc.idpedido DESC";
         return ejecutarConsulta($sql);
     }
 

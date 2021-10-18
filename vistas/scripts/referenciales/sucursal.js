@@ -114,7 +114,7 @@ function mostrar(idsucursal){
 
 //funciona para desactivar registros
 function eliminar(idsucursal){
-    bootbox.confirm("Estas eguro de eliminar la Sucursal?", function(result){
+    bootbox.confirm("Estas seguro de desactivar la Sucursal?", function(result){
         if(result){
             $.post("../../ajax/referenciales/sucursal.php?op=eliminar", {idsucursal : idsucursal}, function(e){
                 tabla.ajax.reload();
@@ -124,10 +124,21 @@ function eliminar(idsucursal){
     })
 }
 
-function mayuscula(e){
+//funciona para activar registros
+function activar(idsucursal){
+    bootbox.confirm("Estas seguro de activar la Sucursal?", function(result){
+        if(result){
+            $.post("../../ajax/referenciales/sucursal.php?op=activar", {idsucursal : idsucursal}, function(e){
+                tabla.ajax.reload();
+            });
+                
+            
+        }
+    })
+}
 
+function mayuscula(e){
     e.value = e.value.toUpperCase();
-    
  }
 
 init();

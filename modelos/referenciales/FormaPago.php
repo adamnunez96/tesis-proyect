@@ -38,5 +38,11 @@ class FormaPago {
         return ejecutarConsulta($sql);
     }
 
+    public function validarExistencia($descripcion){
+        $sql = "SELECT * from formas_pago where descripcion = '$descripcion'";
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
+    }
+
 }
 ?>

@@ -4,6 +4,7 @@ function init(){
     listar();
     $("#fecha_inicio").change(listar);
     $("#fecha_fin").change(listar);
+    
 }
 
 var tabla;
@@ -12,6 +13,8 @@ function listar(){
 
     let fecha_inicio = $("#fecha_inicio").val();
     let fecha_fin = $("#fecha_fin").val();
+    console.log("inicio "+fecha_inicio +" fin "+ fecha_fin);
+
 
     tabla=$('#tbllistado').dataTable({
         "aProcessing": true, //ativamos el procesamiento del datatables

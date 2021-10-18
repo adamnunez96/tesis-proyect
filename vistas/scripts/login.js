@@ -6,9 +6,9 @@ function init(){
         $("#sucursal").val('1');
         $("#sucursal").selectpicker('refresh');
     });
+
 }
 
-let intentos = 1;
 
 $("#frmAcceso").on('submit', function(e){
     e.preventDefault();
@@ -17,34 +17,45 @@ $("#frmAcceso").on('submit', function(e){
     clavea=$("#clavea").val();
     sucursal=$("#sucursal").val();
 
+    validarAcceso(logina, clavea, sucursal);
    
+})
+
+var intentos = 0;
+var accedio = null;
+function validarAcceso(logina, clavea, sucursal){
+
     $.post("../ajax/referenciales/usuario.php?op=verificar",
     {"logina":logina, "clavea":clavea, "sucursal":sucursal},function(data){   
         
-            if(intentos <= 3){
-
+            if(intentos < 3){
+                accedio = "Si";
                 if(data != "null"){
+                    intentos++;
+                    $.post("../ajax/referenciales/usuario.php?op=auditoria",{"logina":logina, "intentos":intentos, "accedio":accedio});
                     $(location).attr("href", "escritorio.php");
-                    console.log(data);
-                    intentos=1;
+                    console.log(intentos);
+                    intentos=0;
                 }else{
                     intentos++;
-                    // console.log(intentos);
-                    // console.log(data);
+                    accedio = "No";
                     bootbox.alert("Usuario y/o Password incorrectos");
+                    $.post("../ajax/referenciales/usuario.php?op=auditoria",{"logina":logina, "intentos":intentos, "accedio": accedio});
                     $("#logina").val("");
                     $("#clavea").val("");
                 }
             }else{
- 
+                console.log(intentos + " - " + logina);
+                accedio = "No";
                 $.post("../ajax/referenciales/usuario.php?op=inactivar",{"logina":logina},function(r){
                     bootbox.alert(r);
                 });
-                intentos=1;
+                $.post("../ajax/referenciales/usuario.php?op=auditoria",{"logina":logina, "intentos":intentos, "accedio": accedio});
+                intentos=0;
             }
           
     });
-})
+}
 
 init();
 

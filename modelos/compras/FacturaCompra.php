@@ -70,12 +70,15 @@ class Compra {
 
         }
 
+        $sql4 = "UPDATE orden_compras SET estado = '2' WHERE idordencompra = '$idordencompra'";
+        ejecutarConsulta($sql4);
+
         return $sw;
 
     }
 
     //implementamos un metodo para anular ingresos
-    public function anular($idcompra){
+    public function anular($idcompra, $idorden){
         $sql = "UPDATE compras SET estado='0' WHERE idcompra = '$idcompra'";
 
         // eliminamos la compra anulada de la tabla libro compras
@@ -83,8 +86,12 @@ class Compra {
 
         // eliminamos la compra anulada de la tabla cuentas a pagar
         $sql3 = "DELETE FROM cuentas_a_pagar WHERE idcompra = '$idcompra'";
+
+        //volvemos habilitar la orden de compras luego de anular la factura
+        $sql4 = "UPDATE orden_compras SET estado = '1' WHERE idordencompra = '$idorden'";
         ejecutarConsulta($sql2);
         ejecutarConsulta($sql3);
+        ejecutarConsulta($sql4);
         return ejecutarConsulta($sql);
     }
 
@@ -104,10 +111,10 @@ class Compra {
     }
 
     //implementar un metodo para listar los registros
-    public function listar(){
-        $sql = "SELECT c.idcompra, c.nrofactura, date(c.fecha) as fecha, p.razonsocial AS proveedor, concat(per.nombre, ' ', per.apellido) AS personal, c.monto, c.estado 
+    public function listar($idsucursal){
+        $sql = "SELECT c.idcompra, c.nrofactura, c.idordencompra, date(c.fecha) as fecha, p.razonsocial AS proveedor, concat(per.nombre, ' ', per.apellido) AS personal, c.monto, c.estado 
         FROM compras c JOIN proveedores p ON c.idproveedor = p.idproveedor JOIN personales per ON c.idpersonal = per.idpersonal 
-        ORDER BY c.idcompra DESC";
+        WHERE c.idsucursal = '$idsucursal' ORDER BY c.idcompra DESC";
         return ejecutarConsulta($sql);
     }
 

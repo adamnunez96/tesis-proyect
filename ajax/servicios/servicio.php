@@ -28,7 +28,7 @@ switch ($_GET["op"]){
     break;
 
     case 'anular':
-        $rspta = $servicio->anular($idservicio);
+        $rspta = $servicio->anular($idservicio, $idordentrabajo);
             echo $rspta ? "Servicio anulado" : "Servicio no se pudo anular";
     break;
 
@@ -102,7 +102,7 @@ switch ($_GET["op"]){
                 "4"=>($reg->estado)?'<span class="label bg-green">Aceptado</span>':
                 '<span class="label bg-red">Anulado</span>',
                 "5"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idservicio. ')"><i class="fa fa-eye"></i></button>'. 
-                ' <button class="btn btn-danger" onclick="anular(' .$reg->idservicio. ')"><i class="fa fa-close"></i></button>' :
+                ' <button class="btn btn-danger" onclick="anular('.$reg->idservicio.', '.$reg->idordentrabajo.')"><i class="fa fa-close"></i></button>' :
                 '<button class="btn btn-warning" onclick="mostrar(' .$reg->idservicio. ')"><i class="fa fa-eye"></i></button>'
             );
         }

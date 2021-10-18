@@ -9,11 +9,21 @@ $descripcion = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($idcaja)){
-            $rspta = $caja->insertar($descripcion);
-            echo $rspta ? "Caja registrada" : "Caja no se pudo registrar";
+            $existencia = $caja->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $caja->insertar($descripcion);
+                echo $rspta ? "Caja registrada" : "Caja no se pudo registrar";
+            }
         }else{
-            $rspta = $caja->editar($idcaja, $descripcion);
-            echo $rspta ? "Caja actualizada" : "Caja no se pudo actualizar";
+            $existencia = $caja->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $caja->editar($idcaja, $descripcion);
+                echo $rspta ? "Caja actualizada" : "Caja no se pudo actualizar";
+            }
         }
     break;
 

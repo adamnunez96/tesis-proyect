@@ -82,6 +82,11 @@ class Usuario {
         return ejecutarConsulta($sql);
     }
 
+    public function listarActivos(){
+        $sql = "SELECT * from usuarios where estado = '1'";
+        return ejecutarConsulta($sql);
+    }
+
     //implementar un metodo para listar los permisos marcados
     public function listarmarcados($idusuario){
         $sql="SELECT * FROM usuariopermiso WHERE idusuario = '$idusuario'";
@@ -92,7 +97,7 @@ class Usuario {
     public function verificar($login, $clave, $sucursal){
         $sql="SELECT p.idusuario, u.usuario, p.idpersonal, concat(p.nombre, ' ', p.apellido) AS personal, p.cargo, p.imagen, s.descripcion as sucu 
         FROM personales p JOIN usuarios u on p.idusuario = u.idusuario JOIN sucursales s ON p.idsucursal = s.idsucursal 
-        where u.usuario = '$login' and u.clave = '$clave' and u.estado = '1' and p.idsucursal = '$sucursal'";
+        where u.usuario = '$login' and u.clave = '$clave' and u.estado = '1' and p.idsucursal = '$sucursal' and p.estado = '1'";
         return ejecutarConsulta($sql);
     }
 
@@ -100,6 +105,19 @@ class Usuario {
     public function inactivar($logina){
         $sql = "UPDATE usuarios set estado='0' where usuario = '$logina'";
         return ejecutarConsulta($sql);
+    }
+
+    public function auditoria($usuario, $intentos, $accedio){
+        $sql = "INSERT INTO auditoria_acceso (usuario, fecha, intentos, accedio) 
+        values ('$usuario', NOW(), '$intentos', '$accedio')";
+        print_r($sql);
+        ejecutarConsulta($sql);
+    }
+
+    public function validarExistencia($descripcion){
+        $sql = "SELECT * from usuarios where usuario = '$descripcion'";
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
     }
 
 }

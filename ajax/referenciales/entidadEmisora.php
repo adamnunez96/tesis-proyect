@@ -11,11 +11,21 @@ $direccion = isset($_POST["direccion"])? limpiarCadena($_POST["direccion"]): "";
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($idEntidadEmisora)){
-            $rspta = $entidadEmisora->insertar($descripcion, $telefono, $direccion);
-            echo $rspta ? "Entidad Emisora registrada" : "Entidad Emisora no se pudo registrar";
+            $existencia = $entidadEmisora->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $entidadEmisora->insertar($descripcion, $telefono, $direccion);
+                echo $rspta ? "Entidad Emisora registrada" : "Entidad Emisora no se pudo registrar";
+            }
         }else{
-            $rspta = $entidadEmisora->editar($idEntidadEmisora, $descripcion, $telefono, $direccion);
-            echo $rspta ? "Entidad Emisora actualizada" : "Entidad Emisora no se pudo actualizar";
+            $existencia = $entidadEmisora->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $entidadEmisora->editar($idEntidadEmisora, $descripcion, $telefono, $direccion);
+                echo $rspta ? "Entidad Emisora actualizada" : "Entidad Emisora no se pudo actualizar";
+            }
         }
     break;
 

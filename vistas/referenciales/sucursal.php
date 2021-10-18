@@ -33,6 +33,7 @@ if(!isset($_SESSION["usuario"])){
                             <th>Ciudad</th>
                             <th>Direccion</th>
                             <th>Telefono</th>
+                            <th>Estado</th>
                             <th>Opciones</th>
                           </thead>
                           <tbody>
@@ -43,6 +44,7 @@ if(!isset($_SESSION["usuario"])){
                             <th>Ciudad</th>
                             <th>Direccion</th>
                             <th>Telefono</th>
+                            <th>Estado</th>
                             <th>Opciones</th>
                           </tfoot>
                         </table>

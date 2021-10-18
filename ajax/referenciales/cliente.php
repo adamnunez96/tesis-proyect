@@ -16,11 +16,21 @@ $correo = isset($_POST["correo"])? limpiarCadena($_POST["correo"]): "";
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($idcliente)){
-            $rspta = $cliente->insertar($idciudad, $ci, $nombre, $apellido, $direccion, $telefono, $correo);
-            echo $rspta ? "Cliente registrado" : "Cliente no se pudo registrar";
+            $existencia = $cliente->validarExistencia($idcliente, $ci, $nombre, $apellido);
+            if($existencia > 0){
+                echo "El Cliente ".$nombre ." ". $apellido." con CI ".$ci." ya se encuentra registrado. Favor verificar";
+            }else{
+                $rspta = $cliente->insertar($idciudad, $ci, $nombre, $apellido, $direccion, $telefono, $correo);
+                echo $rspta ? "Cliente registrado" : "Cliente no se pudo registrar";
+            }
         }else{
-            $rspta = $cliente->editar($idcliente, $idciudad, $ci, $nombre, $apellido, $direccion, $telefono, $correo);
-            echo $rspta ? "Cliente actualizado" : "Cliente no se pudo actualizar";
+            $existencia = $cliente->validarExistencia($idcliente, $ci, $nombre, $apellido);
+            if($existencia > 0){
+                echo "El Cliente ".$nombre + $apellido." con CI ".$ci." ya se encuentra registrado. Favor verificar";
+            }else{
+                $rspta = $cliente->editar($idcliente, $idciudad, $ci, $nombre, $apellido, $direccion, $telefono, $correo);
+                echo $rspta ? "Cliente actualizado" : "Cliente no se pudo actualizar";
+            }
         }
     break;
 

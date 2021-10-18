@@ -46,7 +46,7 @@ switch ($_GET["op"]){
     break;
 
     case 'anular':
-        $rspta = $compra->anular($idcompra);
+        $rspta = $compra->anular($idcompra, $idorden);
             echo $rspta ? "Factura de Compra anulado" : "Factura de Compra no se puede anular";
     break;
 
@@ -107,7 +107,7 @@ switch ($_GET["op"]){
 
     case 'listar':
         
-        $rspta=$compra->listar();
+        $rspta=$compra->listar($idsucursal);
         //vamos a declarar una array
         $data = Array();
 
@@ -119,9 +119,10 @@ switch ($_GET["op"]){
                 "3"=>$reg->proveedor,
                 "4"=>$reg->personal,
                 "5"=>$reg->monto,
-                "6"=>($reg->estado)?'<span class="label bg-green">Aceptado</span>':
-                '<span class="label bg-red">Anulado</span>',
-                "7"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idcompra. ')"><i class="fa fa-eye"></i></button>'. ' <button class="btn btn-danger" onclick="anular(' .$reg->idcompra. ')"><i class="fa fa-close"></i></button>' :
+                "6"=>($reg->estado)==1?'<span class="label bg-green">Aceptado</span>':
+                ($reg->estado==0?'<span class="label bg-red">Anulado</span>':'<span class="label bg-yellow">Utilizado</span>'),
+                "7"=>($reg->estado)==1?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idcompra. ')"><i class="fa fa-eye"></i></button>'. 
+                ' <button class="btn btn-danger" onclick="anular(' .$reg->idcompra. ', '.$reg->idordencompra.')"><i class="fa fa-close"></i></button>' :
                 '<button class="btn btn-warning" onclick="mostrar(' .$reg->idcompra. ')"><i class="fa fa-eye"></i></button>'
             );
         }

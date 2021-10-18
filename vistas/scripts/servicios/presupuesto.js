@@ -266,10 +266,10 @@ $("#guardar").hide();
 $("#btnGuardar").hide();
 
 //funciona para desactivar registros
-function anular(idpresupuesto){
+function anular(idpresupuesto, iddiagnostico){
     bootbox.confirm("Estas Seguro de anular el Presupuesto?", function(result){
         if(result){
-            $.post("../../ajax/servicios/presupuesto.php?op=anular", {idpresupuesto : idpresupuesto}, function(e){
+            $.post("../../ajax/servicios/presupuesto.php?op=anular", {idpresupuesto : idpresupuesto, iddiagnostico:iddiagnostico}, function(e){
                 tabla.ajax.reload();
             });    
         }

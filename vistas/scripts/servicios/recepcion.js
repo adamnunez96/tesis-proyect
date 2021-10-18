@@ -255,6 +255,7 @@ function editarDetalle(idvehiculo, vehiculo, chapa){
                     <td><input type="hidden" name="idvehiculo" value="${idvehiculo}">${idvehiculo}</td>
                     <td><input type="hidden" name="vehiculo" value="${vehiculo}">${vehiculo}</td>
                     <td><input type="hidden" name="chapa" value="${chapa}">${chapa}</td>
+                    <td><input type="hidden" name="descripcion" value="${chapa}">${chapa}</td>
                 </tr>`;
 
         cont++;

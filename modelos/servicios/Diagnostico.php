@@ -10,27 +10,34 @@ class Diagnostico {
 
     //implementamos un metodo para insertar registros
     public function insertar($idrecepcion, $idcliente, $idpersonal, $idsucursal, $idvehiculo, $fecha_hora, $obs){
-            $sql = "INSERT INTO diagnosticos (idrecepcion, idcliente, idpersonal, idsucursal ,fecha, observacion, estado) 
-            VALUES ('$idrecepcion', '$idcliente', '$idpersonal', '$idsucursal', '$fecha_hora', '$obs', '1')";
-            $idDiagnosticoNew = ejecutarConsulta_retornarID($sql);
 
-            $band = true;
-            $i = 0;
+        $sql = "INSERT INTO diagnosticos (idrecepcion, idcliente, idpersonal, idsucursal ,fecha, observacion, estado) 
+        VALUES ('$idrecepcion', '$idcliente', '$idpersonal', '$idsucursal', '$fecha_hora', '$obs', '1')";
+        $idDiagnosticoNew = ejecutarConsulta_retornarID($sql);
 
-            while($i < count($idvehiculo)){
-                $sql_detalle = "INSERT INTO diagnostico_detalle (iddiagnostico, idvehiculo) 
-                VALUES ('$idDiagnosticoNew', '$idvehiculo[$i]')";
-                ejecutarConsulta($sql_detalle) or $sw = false;
+        $band = true;
+        $i = 0;
 
-                $i = $i + 1;
-            }
-            return $band;
+        while($i < count($idvehiculo)){
+            $sql_detalle = "INSERT INTO diagnostico_detalle (iddiagnostico, idvehiculo) 
+            VALUES ('$idDiagnosticoNew', '$idvehiculo[$i]')";
+            ejecutarConsulta($sql_detalle) or $sw = false;
+
+            $i = $i + 1;
+        }
+
+        $sql2 = "UPDATE recepciones SET estado = '2' WHERE idrecepcion = '$idrecepcion'";
+        ejecutarConsulta($sql2);
+
+        return $band;
         
     }
 
     //implementamos un metodo para anular
-    public function anular($iddiagnostico){
+    public function anular($iddiagnostico, $idrecepcion){
         $sql = "UPDATE diagnosticos SET estado='0' WHERE iddiagnostico = '$iddiagnostico'";
+        $sql2 = "UPDATE recepciones SET estado = '1' WHERE idrecepcion = '$idrecepcion'";
+        ejecutarConsulta($sql2);
         return ejecutarConsulta($sql);
     }
 
@@ -52,7 +59,7 @@ class Diagnostico {
 
     //implementar un metodo para listar los registros
     public function listar(){
-        $sql = "SELECT d.iddiagnostico, date(d.fecha) AS fecha, concat(c.nombre, ' ', c.apellido) AS cliente, concat(p.nombre, ' ', p.apellido) AS personal, d.estado 
+        $sql = "SELECT d.iddiagnostico, d.idrecepcion, date(d.fecha) AS fecha, concat(c.nombre, ' ', c.apellido) AS cliente, concat(p.nombre, ' ', p.apellido) AS personal, d.estado 
         FROM diagnosticos d JOIN clientes c ON d.idcliente = c.idcliente JOIN personales p ON d.idpersonal = p.idpersonal JOIN sucursales s ON d.idsucursal = s.idsucursal 
         ORDER BY d.iddiagnostico DESC";
         return ejecutarConsulta($sql);

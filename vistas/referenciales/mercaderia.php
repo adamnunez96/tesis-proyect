@@ -69,12 +69,12 @@ if(!isset($_SESSION["usuario"])){
 
                           <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <label>Precio Compra(*)</label>
-                            <input type="number" class="form-control" name="precioCompra" id="precioCompra" placeholder="Precio Compra" required>
+                            <input type="text" class="form-control" name="precioCompra" id="precioCompra" placeholder="Precio Compra" required onkeypress="return valideKey(event);">
                           </div>
 
                           <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <label>Precio Venta(*)</label>
-                            <input type="number" class="form-control" name="precioVenta" id="precioVenta" placeholder="Precio Venta" required>
+                            <input type="text" class="form-control" name="precioVenta" id="precioVenta" placeholder="Precio Venta" required onkeypress="return valideKey(event);">
                           </div>
 
                           <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">

@@ -216,10 +216,10 @@ function mostrar(idorden){
 }
 
 //funciona para desactivar registros
-function anular(idorden){
+function anular(idorden, idpedido){
     bootbox.confirm("Estas Seguro de anular la Orden de Compra?", function(result){
         if(result){
-            $.post("../../ajax/compras/ordenCompra.php?op=anular", {idorden : idorden}, function(e){
+            $.post("../../ajax/compras/ordenCompra.php?op=anular", {idorden : idorden, idpedido:idpedido}, function(e){
                 tabla.ajax.reload();
             });    
         }
@@ -262,7 +262,7 @@ function agregarDetalle(idmercaderia, descripcion, preciocompra){
         '<td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('+cont+')">X</button></td>'+
         '<td><input type="hidden" name="idmercaderia[]" value="'+idmercaderia+'">'+idmercaderia+'</td>'+
         '<td><input type="hidden" name="descripcion[]" value="'+descripcion+'">'+descripcion+'</td>'+
-        '<td><input type="number" name="cantidad[]" id="cantidad[]" value="'+cantidad+'"></td>'+
+        '<td><input type="number" name="cantidad[]" id="cantidad[]" min="1" pattern="^[0-9]+" value="'+cantidad+'"></td>'+
         '<td><input type="hidden" name="preciocompra[]" id="preciocompra[]" value="'+preciocompra+'">'+preciocompra+'</td>'+
         '<td><span name="subtotal" id="subtotal'+cont+'">'+subtotal+'</span></td>'+
         '<td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>'+
@@ -283,7 +283,7 @@ function mostrarDetalle(data){
         '<td><button type="button" class="btn btn-danger" onclick="eliminarDetalle('+cont+')">X</button></td>'+
         '<td><input type="hidden" name="idmercaderia[]" value="'+detalle[1]+'">'+detalle[1]+'</td>'+
         '<td><input type="hidden" name="descripcion[]" value="'+detalle[2]+'">'+detalle[2]+'</td>'+
-        '<td><input type="number" name="cantidad[]" style="width:80px" value="'+detalle[3]+'"></td>'+
+        '<td><input type="number" name="cantidad[]" min="1" pattern="^[0-9]+" style="width:80px" value="'+detalle[3]+'"></td>'+
         '<td><input type="hidden" name="preciocompra[]" value="'+detalle[4]+'">'+detalle[4]+'</td>'+
         '<td><span name="subtotal" id="subtotal'+cont+'">'+subtotal+'</span></td>'+
         '<td><button type="button" onclick="modificarSubtotales()" class="btn btn-info"><i class="fa fa-refresh"></i></button></td>'+

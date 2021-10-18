@@ -4,10 +4,6 @@ var tabla;
 function init(){
     mostrarform(false);
     listar();
-
-     $("#precioVenta").on("blur",()=>{
-        validarPrecio();
-     })
   
     $("#formulario").on("submit", function(e){
         guardaryeditar(e);
@@ -93,25 +89,35 @@ function listar(){
 
 function guardaryeditar(e){
     e.preventDefault(); //no se activara la accion predeterminada del evento
-    $("#btnGuardar").prop("disabled",true);
     var formData = new FormData($("#formulario")[0]);
+    let precioCompra = +$('#precioCompra').val();
+    let precioVenta = +$('#precioVenta').val();
+    if(precioCompra != 0 && precioVenta != 0){
+        if(precioCompra >= precioVenta){
+            bootbox.alert('El precio de Venta debe ser Mayor al precio de Compra. Favor Verificar');
+            precioCompra = $('#precioVenta').val("");
 
-    $.ajax({
-        url: "../../ajax/referenciales/mercaderia.php?op=guardaryeditar",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
+        }else{
+            $("#btnGuardar").prop("disabled",true);
+            $.ajax({
+                url: "../../ajax/referenciales/mercaderia.php?op=guardaryeditar",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+        
+                success: function(datos){
+                    bootbox.alert(datos); //aca recibimos el mensaje de mi categoria.php que esta en ajax
+                    mostrarform(false);
+                    tabla.ajax.reload();
+                }
+            });
+        }  
+    }else{
+        bootbox.alert('Los montos ingresados deben ser mayor a 0. Favor verificar');
 
-        success: function(datos){
-            bootbox.alert(datos); //aca recibimos el mensaje de mi categoria.php que esta en ajax
-            mostrarform(false);
-            tabla.ajax.reload();
-        }
-
-    });
+    }    
     limpiar();
-
 }
 
 function mostrar(idmercaderia){
@@ -161,15 +167,31 @@ function mayuscula(e){
     e.value = e.value.toUpperCase();
  }
 
- function validarPrecio(){
+//  $("#precioVenta").on("blur",()=>{
+//     validarPrecio(); //validamos que el precion
+//  });
 
-     let precioCompra = $('#precioCompra').val();
-     let precioVenta = $('#precioVenta').val();
+ /*function validarPrecio(){
+    let precioCompra = +$('#precioCompra').val();
+    let precioVenta = +$('#precioVenta').val();
 
-     if(precioCompra >= precioVenta){
-         bootbox.alert('El precio de Venta debe ser MAYOR al precio de Compra!');
-         precioCompra = $('#precioVenta').val("");
-     }
- }
+    if(precioCompra >= precioVenta){
+        bootbox.alert('El precio de Venta debe ser MAYOR al precio de Compra!');
+        precioCompra = $('#precioVenta').val("");
+    };
+ }*/
+
+
+ function valideKey(evt){
+    
+    // code is the decimal ASCII representation of the pressed key.
+    var code = (evt.which) ? evt.which : evt.keyCode;
+    
+    if((code==8) || (code>=48 && code<=57)) { // backspace.
+      return true;
+    } else{ // other keys.
+      return false;
+    }
+}
 
 init();

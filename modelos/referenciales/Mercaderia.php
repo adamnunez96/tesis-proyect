@@ -62,5 +62,16 @@ class Mercaderia {
         WHERE mer.estado = '1'";
         return ejecutarConsulta($sql);
     }
+
+    public function validarExistencia($idmercaderia, $descripcion, $idmarca){
+        if(empty($idmercaderia)){
+            $sql = "SELECT * from mercaderias where descripcion = '$descripcion' and idmarca = '$idmarca'";
+        }else{
+            $sql = "SELECT * from mercaderias where descripcion = '$descripcion' and idmarca = '$idmarca' and idmercaderia != '$idmercaderia'";
+        }
+        
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
+    }
 }
 ?>

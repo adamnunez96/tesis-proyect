@@ -31,6 +31,7 @@ if(!isset($_SESSION["usuario"])){
                             <th>Id</th>
                             <th>Descripcion</th>
                             <th>Sucursal</th>
+                            <th>Estado</th>
                             <th>Opciones</th>
                           </thead>
                           <tbody>
@@ -39,6 +40,7 @@ if(!isset($_SESSION["usuario"])){
                             <th>Id</th>
                             <th>Descripcion</th>
                             <th>Sucursal</th>
+                            <th>Estado</th>
                             <th>Opciones</th>
                           </tfoot>
                         </table>

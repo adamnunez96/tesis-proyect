@@ -38,5 +38,16 @@ class Caja {
         return ejecutarConsulta($sql);
     }
 
+    public function listarActivos(){
+        $sql = "SELECT * from cajas where estado = '1'";
+        return ejecutarConsulta($sql);
+    }
+
+    public function validarExistencia($descripcion){
+        $sql = "SELECT * from cajas where descripcion = '$descripcion'";
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
+    }
+
 }
 ?>

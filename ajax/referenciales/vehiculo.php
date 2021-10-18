@@ -14,11 +14,21 @@ $anho = isset($_POST["anho"])? limpiarCadena($_POST["anho"]): "";
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($idvehiculo)){
-            $rspta = $vehiculo->insertar($idmarca, $modelo, $chapa, $observacion, $anho);
-            echo $vehiculo ? "Vehiculo registrado" : "Vehiculo no se pudo registrar";
+            $existencia = $vehiculo->validarExistencia($idmarca, $modelo, $chapa);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $vehiculo->insertar($idmarca, $modelo, $chapa, $observacion, $anho);
+                echo $vehiculo ? "Vehiculo registrado" : "Vehiculo no se pudo registrar";
+            }
         }else{
-            $rspta = $vehiculo->editar($idvehiculo, $idmarca, $modelo, $chapa, $observacion, $anho);
-            echo $rspta ? "Vehiculo actualizado" : "Vehiculo no se pudo actualizar";
+            $existencia = $vehiculo->validarExistencia($idmarca, $modelo, $chapa);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $vehiculo->editar($idvehiculo, $idmarca, $modelo, $chapa, $observacion, $anho);
+                echo $rspta ? "Vehiculo actualizado" : "Vehiculo no se pudo actualizar";
+            }
         }
     break;
 

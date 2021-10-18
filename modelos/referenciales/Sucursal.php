@@ -10,7 +10,7 @@ class Sucursal {
 
     //implementamos un metodo para insertar registros
     public function insertar($idciudad, $descripcion, $direccion, $telefono){
-        $sql = "INSERT into sucursales (idciudad, descripcion, direccion, telefono) values ('$idciudad', '$descripcion', '$direccion', '$telefono')";
+        $sql = "INSERT into sucursales (idciudad, descripcion, direccion, telefono, estado) values ('$idciudad', '$descripcion', '$direccion', '$telefono', '1')";
         return ejecutarConsulta($sql);
     }
 
@@ -22,7 +22,12 @@ class Sucursal {
 
     //implementamos un metodo para eliminar registros
     public function eliminar($idsucursal){
-        $sql = "DELETE from sucursales where idsucursal = '$idsucursal'";
+        $sql = "UPDATE sucursales set estado = '0' where idsucursal = '$idsucursal'";
+        return ejecutarConsulta($sql);
+    }
+
+    public function activar($idsucursal){
+        $sql = "UPDATE sucursales set estado = '1' where idsucursal = '$idsucursal'";
         return ejecutarConsulta($sql);
     }
 
@@ -34,8 +39,14 @@ class Sucursal {
 
     //implementar un metodo para listar los registros
     public function listar(){
-        $sql = "SELECT s.idsucursal, s.descripcion, s.idciudad, c.descripcion as ciudad, s.direccion, s.telefono from sucursales s INNER JOIN ciudades c on s.idciudad = c.idciudad";
+        $sql = "SELECT s.idsucursal, s.descripcion, s.idciudad, c.descripcion as ciudad, s.direccion, s.telefono, s.estado from sucursales s INNER JOIN ciudades c on s.idciudad = c.idciudad";
         return ejecutarConsulta($sql);
+    }
+
+    public function validarExistencia($descripcion, $idciudad){
+        $sql = "SELECT * from sucursales where descripcion = '$descripcion' and idciudad = '$idciudad'";
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
     }
 
 }

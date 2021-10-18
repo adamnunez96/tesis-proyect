@@ -9,11 +9,21 @@ $descripcion = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($idformapago)){
-            $rspta = $formaPago->insertar($descripcion, $_POST["cuota"]);
-            echo $rspta ? "Forma de Pago registrado" : "Forma de Pago no se pudo registrar";
+            $existencia = $formaPago->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $formaPago->insertar($descripcion, $_POST["cuota"]);
+                echo $rspta ? "Forma de Pago registrado" : "Forma de Pago no se pudo registrar";
+            }
         }else{
-            $rspta = $formaPago->editar($idformapago, $descripcion, $_POST["cuota"]);
-            echo $rspta ? "Forma de Pago actualizado" : "Forma de Pago no se pudo actualizar";
+            $existencia = $formaPago->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $formaPago->editar($idformapago, $descripcion, $_POST["cuota"]);
+                echo $rspta ? "Forma de Pago actualizado" : "Forma de Pago no se pudo actualizar";
+            }
         }
     break;
 

@@ -38,5 +38,11 @@ class EntidadEmisora {
         return ejecutarConsulta($sql);
     }
 
+    public function validarExistencia($descripcion){
+        $sql = "SELECT * from entidad_emisora where descripcion = '$descripcion'";
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
+    }
+
 }
 ?>

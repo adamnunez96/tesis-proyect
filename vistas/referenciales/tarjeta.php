@@ -3,7 +3,7 @@
 ob_start();
 session_start();
 
-if(!isset($_SESSION["tarjeta"])){
+if(!isset($_SESSION["usuario"])){
   header("Location: ../login.html");
 }else{
   require 'head.php';

@@ -21,10 +21,10 @@ class Personal {
 
     //implementamos un metodo para editar registros
     public function editar($idpersonal, $idusuario, $idciudad, $idsucursal, $nombre, $apellido, $documento, $direccion, $telefono, $cargo, $correo, $imagen){
-        $sql = "UPDATE personales SET idusuario = '$idusuario', idciudad = '$idciudad', idsucursal = '$idsucursal', nombre = '$nombre', apellido = '$apellido', 
+        $sql2 = "UPDATE personales SET idusuario = '$idusuario', idciudad = '$idciudad', idsucursal = '$idsucursal', nombre = '$nombre', apellido = '$apellido', 
         documento = '$documento',direccion = '$direccion', telefono = '$telefono', cargo = '$cargo', correo = '$correo', imagen = '$imagen' 
         where idpersonal = '$idpersonal'";
-        return ejecutarConsulta($sql);
+        return ejecutarConsulta($sql2);
     }
 
     //implementamos un metodo para desactivar registros
@@ -57,6 +57,17 @@ class Personal {
         FROM personales p JOIN usuarios u ON p.idusuario = u.idusuario JOIN ciudades c ON p.idciudad = c.idciudad 
         WHERE p.estado = '1'";
         return ejecutarConsulta($sql);
+    }
+
+    public function validarExistencia($idpersonal, $nombre, $apellido, $documento){
+        $resul = null;
+        if(empty($idpersonal)){ // aca va entrar en caso que sea un nuevo registro
+            $sql = "SELECT * from personales where nombre = '$nombre' and apellido = '$apellido' and documento = '$documento'";
+        }else{  //aca va entrar en caso que sea una actualizacion de un registro
+            $sql = "SELECT * from personales where nombre = '$nombre' and apellido = '$apellido' and documento = '$documento' and idpersonal != '$idpersonal'";   
+        }
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
     }
 
 }

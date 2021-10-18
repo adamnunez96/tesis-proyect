@@ -28,12 +28,16 @@ class OrdenCompra {
             $num_elementos =$num_elementos + 1;
         }
 
+        $sql2 = "UPDATE pedido_compra SET estado = '2' WHERE idpedido = '$idpedido'";
+        ejecutarConsulta($sql2);
         return $sw;
     }
 
     //implementamos un metodo para anular ingresos
-    public function anular($idorden){
+    public function anular($idorden, $idpedido){
         $sql = "UPDATE orden_compras SET estado='0' WHERE idordencompra = '$idorden'";
+        $sql2 = "UPDATE pedido_compra SET estado = '1' WHERE idpedido = '$idpedido'";
+        ejecutarConsulta($sql2);
         return ejecutarConsulta($sql);
     }
 
@@ -53,10 +57,10 @@ class OrdenCompra {
     }
 
     //implementar un metodo para listar los registros
-    public function listar(){
-        $sql = "SELECT oc.idordencompra, date(oc.fecha) AS fecha, pro.razonsocial AS proveedor, concat(p.nombre, ' ', p.apellido) AS personal, oc.monto, oc.estado 
+    public function listar($idsucursal){
+        $sql = "SELECT oc.idordencompra, oc.idpedido, date(oc.fecha) AS fecha, pro.razonsocial AS proveedor, concat(p.nombre, ' ', p.apellido) AS personal, oc.monto, oc.estado 
         FROM orden_compras oc JOIN personales p ON oc.idpersonal = p.idpersonal JOIN proveedores pro ON oc.idproveedor = pro.idproveedor 
-        ORDER BY oc.idordencompra DESC";
+        WHERE oc.idsucursal = '$idsucursal' ORDER BY oc.idordencompra DESC";
         return ejecutarConsulta($sql);
     }
 

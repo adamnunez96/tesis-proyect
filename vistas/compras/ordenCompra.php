@@ -60,7 +60,7 @@
 
                           <div class="form-group col-lg-2 col-md-2 col-sm-6 col-xs-12">
                             <label>idPedido:</label>
-                            <input type="text" name="idpedido" id="idpedido" class="form-control">
+                            <input type="text" name="idpedido" id="idpedido" class="form-control" readonly>
                           </div>
                           
                           <div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">

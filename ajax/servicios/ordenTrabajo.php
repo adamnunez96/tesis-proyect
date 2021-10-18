@@ -28,7 +28,7 @@ switch ($_GET["op"]){
     break;
 
     case 'anular':
-        $rspta = $orden->anular($idorden);
+        $rspta = $orden->anular($idorden, $idpresupuestoservicio);
             echo $rspta ? "Orden Trabajo anulado" : "Orden Trabajo no se pudo anular";
     break;
 
@@ -99,10 +99,10 @@ switch ($_GET["op"]){
                 "1"=>$reg->fecha,
                 "2"=>$reg->cliente,
                 "3"=>$reg->personal,
-                "4"=>($reg->estado)?'<span class="label bg-green">Aceptado</span>':
-                '<span class="label bg-red">Anulado</span>',
-                "5"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idordentrabajo. ')"><i class="fa fa-eye"></i></button>'. 
-                ' <button class="btn btn-danger" onclick="anular(' .$reg->idordentrabajo. ')"><i class="fa fa-close"></i></button>' :
+                "4"=>($reg->estado)==1?'<span class="label bg-green">Aceptado</span>':
+                ($reg->estado==0?'<span class="label bg-red">Anulado</span>': "<span class='label bg-yellow'>Utilizado</span>"),
+                "5"=>($reg->estado)==1?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idordentrabajo. ')"><i class="fa fa-eye"></i></button>'. 
+                ' <button class="btn btn-danger" onclick="anular('.$reg->idordentrabajo.', '.$reg->idpresupuestoservicio.')"><i class="fa fa-close"></i></button>' :
                 '<button class="btn btn-warning" onclick="mostrar(' .$reg->idordentrabajo. ')"><i class="fa fa-eye"></i></button>'
             );
         }

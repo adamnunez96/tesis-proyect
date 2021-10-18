@@ -38,5 +38,11 @@ class Marca {
         return ejecutarConsulta($sql);
     }
 
+    public function validarExistencia($descripcion){
+        $sql = "SELECT * from marcas where descripcion = '$descripcion'";
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
+    }
+
 }
 ?>

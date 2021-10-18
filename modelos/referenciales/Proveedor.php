@@ -52,5 +52,14 @@ class Proveedor {
         return ejecutarConsulta($sql);
     }
 
+    public function validarExistencia($idproveedor, $razonSocial, $ruc){
+        if(empty($idproveedor)){
+            $sql = "SELECT * from proveedores where razonsocial = '$razonSocial' and ruc = '$ruc'";
+        }else{
+            $sql = "SELECT * from proveedores where razonsocial = '$razonSocial' and ruc = '$ruc' and idproveedor != '$idproveedor'";
+        }
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
+    }
 }
 ?>

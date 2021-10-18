@@ -1,4 +1,4 @@
-var tabla;
+ var tabla;
 
 //funcion que se ejecuta al inicio
 function init(){
@@ -103,7 +103,7 @@ function mostrar(idciudad){
 
 //funciona para desactivar registros
 function eliminar(idciudad){
-    bootbox.confirm("Estas Seguro de eliminar la Ciudad?", function(result){
+    bootbox.confirm("Estas Seguro de desactivar la Ciudad?", function(result){
         if(result){
             $.post("../../ajax/referenciales/ciudad.php?op=eliminar", {idciudad : idciudad}, function(e){
                 tabla.ajax.reload();
@@ -112,6 +112,18 @@ function eliminar(idciudad){
         }
     })
 }
+
+//funciona para activar registros
+function activar(idciudad){
+    bootbox.confirm("Estas seguro de activar la Ciudad?", function(result){
+        if(result){
+            $.post("../../ajax/referenciales/ciudad.php?op=activar", {idciudad : idciudad}, function(e){
+                tabla.ajax.reload();
+            });
+        }
+    })
+}
+
 // poner todo en mayuscula
 function mayuscula(){
    let descripcion = document.querySelector('#descripcion');

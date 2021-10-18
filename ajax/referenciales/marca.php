@@ -9,11 +9,21 @@ $descripcion = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($idmarca)){
-            $rspta = $marca->insertar($descripcion);
-            echo $rspta ? "Marca registrada" : "Marca no se pudo registrar";
+            $existencia = $marca->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $marca->insertar($descripcion);
+                echo $rspta ? "Marca registrada" : "Marca no se pudo registrar";
+            }
         }else{
-            $rspta = $marca->editar($idmarca, $descripcion);
-            echo $rspta ? "Marca actualizada" : "Marca no se pudo actualizar";
+            $existencia = $marca->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $marca->editar($idmarca, $descripcion);
+                echo $rspta ? "Marca actualizada" : "Marca no se pudo actualizar";
+            }
         }
     break;
 

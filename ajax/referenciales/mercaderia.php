@@ -31,11 +31,21 @@ switch ($_GET["op"]){
         }
 
         if(empty($idmercaderia)){
-            $rspta = $mercaderia->insertar($idtipoimpuesto, $idmarca, $descripcion, $precioCompra, $precioVenta, $imagen, $idsucursal);
-            echo $rspta ? "Mercaderia registrada" : "Mercaderia no se pudo registrar";
+            $existencia = $mercaderia->validarExistencia($idmercaderia, $descripcion, $idmarca);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion y marca. Favor verificar";
+            }else{
+                $rspta = $mercaderia->insertar($idtipoimpuesto, $idmarca, $descripcion, $precioCompra, $precioVenta, $imagen, $idsucursal);
+                echo $rspta ? "Mercaderia registrada" : "Mercaderia no se pudo registrar";
+            }
         }else{
-            $rspta = $mercaderia->editar($idmercaderia, $idtipoimpuesto, $idmarca, $descripcion, $precioCompra, $precioVenta, $imagen);
-            echo $rspta ? "Mercaderia actualizado" : "Mercaderia no se pudo actualizar";
+            $existencia = $mercaderia->validarExistencia($idmercaderia, $descripcion, $idmarca);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion y marca. Favor verificar";
+            }else{
+                $rspta = $mercaderia->editar($idmercaderia, $idtipoimpuesto, $idmarca, $descripcion, $precioCompra, $precioVenta, $imagen);
+                echo $rspta ? "Mercaderia actualizado" : "Mercaderia no se pudo actualizar";
+            }
         }
     break;
 

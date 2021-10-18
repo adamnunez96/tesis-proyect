@@ -73,7 +73,7 @@ switch ($_GET["op"]){
 
     case 'listar':
         
-        $rspta=$ajuste->listar();
+        $rspta=$ajuste->listar($idsucursal);
         //vamos a declarar una array
         $data = Array();
 

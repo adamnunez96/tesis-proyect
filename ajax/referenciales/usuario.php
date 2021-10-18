@@ -20,11 +20,21 @@ switch ($_GET["op"]){
         $clavehash = hash("SHA256", $clave);//Al editar se encripta n veces.
 
         if(empty($idusuario)){
-            $rspta = $usuario->insertar($login, $clavehash, $permisos);
-            echo $rspta ? "Usuario registrado" : "No se pudieron registrar todos los datos del usuario";
+            $existencia = $usuario->validarExistencia($login);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $usuario->insertar($login, $clavehash, $permisos);
+                echo $rspta ? "Usuario registrado" : "No se pudieron registrar todos los datos del usuario";
+            }
         }else{
-            $rspta = $usuario->editar($idusuario, $login, $clavehash, $permisos);
-            echo $rspta ? "Usuario actualizado" : "Usuario no se pudo actualizar";
+            $existencia = $usuario->validarExistencia($login);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $usuario->editar($idusuario, $login, $clavehash, $permisos);
+                echo $rspta ? "Usuario actualizado" : "Usuario no se pudo actualizar";
+            }
         }
 
     break;
@@ -153,6 +163,14 @@ switch ($_GET["op"]){
         // destruimos la sesion
         session_destroy();
         header("Location: ../../index.php");
+    break;
+
+    case 'auditoria':
+        $login = $_POST['logina'];
+        $intentos = $_POST['intentos'];
+        $accedio = $_POST['accedio'];
+        $rspta = $usuario->auditoria($login, $intentos, $accedio);
+        //echo $rspta ? "auditoria insertada" : "error en la insercion de la auditoria";
     break;
 }
 

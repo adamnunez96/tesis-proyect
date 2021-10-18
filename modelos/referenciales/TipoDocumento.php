@@ -38,5 +38,11 @@ class TipoDocumento {
         return ejecutarConsulta($sql);
     }
 
+    public function validarExistencia($descripcion){
+        $sql = "SELECT * from tipo_documentos where descripcion = '$descripcion'";
+        $resul = ejecutarConsulta($sql);
+        return mysqli_num_rows($resul);
+    }
+
 }
 ?>

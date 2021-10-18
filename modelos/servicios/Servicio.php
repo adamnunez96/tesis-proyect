@@ -9,38 +9,43 @@ class Servicio {
     }
 
     //implementamos un metodo para insertar registros
-    public function insertar($idordencompa, $idcliente, $idpersonal, $idsucursal, $fecha_hora, $obs, $idvehiculo, $idmercaderia, $cantidad, $precio){
-            $sql = "INSERT INTO servicios (idordentrabajo, idcliente, idpersonal, idsucursal ,fecha, observacion, estado) 
-            VALUES ('$idordencompa', '$idcliente', '$idpersonal', '$idsucursal', '$fecha_hora', '$obs', '1')";
-            $idServicioNew = ejecutarConsulta_retornarID($sql);
+    public function insertar($idordentrabajo, $idcliente, $idpersonal, $idsucursal, $fecha_hora, $obs, $idvehiculo, $idmercaderia, $cantidad, $precio){
+        $sql = "INSERT INTO servicios (idordentrabajo, idcliente, idpersonal, idsucursal ,fecha, observacion, estado) 
+        VALUES ('$idordentrabajo', '$idcliente', '$idpersonal', '$idsucursal', '$fecha_hora', '$obs', '1')";
+        $idServicioNew = ejecutarConsulta_retornarID($sql);
 
-            $band = true;
-            $i = 0;
+        $band = true;
+        $i = 0;
 
-            while($i < count($idvehiculo)){
-                $sql_vehiculo = "INSERT INTO servicios_detalle (idservicio, idvehiculo) 
-                VALUES ('$idServicioNew', '$idvehiculo[$i]')";
-                ejecutarConsulta($sql_vehiculo);
+        while($i < count($idvehiculo)){
+            $sql_vehiculo = "INSERT INTO servicios_detalle (idservicio, idvehiculo) 
+            VALUES ('$idServicioNew', '$idvehiculo[$i]')";
+            ejecutarConsulta($sql_vehiculo);
 
-                $i++;
-            }
+            $i++;
+        }
 
-            $j = 0;
-            while($j < count($idmercaderia)){
-                $sql_mercaderia = "INSERT INTO servicios_detalle (idservicio, idvehiculo, idmercaderia, cantidad, precio) 
-                VALUES ('$idServicioNew', '$idvehiculo[$j]', '$idmercaderia[$j]', '$cantidad[$j]', '$precio[$j]')";
-                ejecutarConsulta($sql_mercaderia) or $sw = false;
+        $j = 0;
+        while($j < count($idmercaderia)){
+            $sql_mercaderia = "INSERT INTO servicios_detalle (idservicio, idvehiculo, idmercaderia, cantidad, precio) 
+            VALUES ('$idServicioNew', '$idvehiculo[$j]', '$idmercaderia[$j]', '$cantidad[$j]', '$precio[$j]')";
+            ejecutarConsulta($sql_mercaderia) or $sw = false;
 
-                $j++;
-            }
+            $j++;
+        }
 
-            return $band;
+        $sql2 = "UPDATE orden_trabajos SET estado = '2' WHERE idordentrabajo = '$idordentrabajo'";
+        ejecutarConsulta($sql2);
+
+        return $band;
         
     }
 
     //implementamos un metodo para anular
-    public function anular($idservicio){
+    public function anular($idservicio, $idordentrabajo){
         $sql = "UPDATE servicios SET estado='0' WHERE idservicio = '$idservicio'";
+        $sql2 = "UPDATE orden_trabajos SET estado = '1' WHERE idordentrabajo = '$idordentrabajo'";
+        ejecutarConsulta($sql2);
         return ejecutarConsulta($sql);
     }
 
@@ -63,17 +68,25 @@ class Servicio {
 
     //implementar un metodo para listar los registros
     public function listar(){
-        $sql = "SELECT s.idservicio, date(s.fecha) AS fecha, concat(c.nombre, ' ', c.apellido) AS cliente, concat(p.nombre, ' ', p.apellido) AS personal, s.estado 
+        $sql = "SELECT s.idservicio, s.idordentrabajo, date(s.fecha) AS fecha, concat(c.nombre, ' ', c.apellido) AS cliente, concat(p.nombre, ' ', p.apellido) AS personal, s.estado 
         FROM servicios s JOIN clientes c ON s.idcliente = c.idcliente JOIN personales p ON s.idpersonal = p.idpersonal JOIN sucursales suc ON s.idsucursal = suc.idsucursal 
         ORDER BY s.idservicio DESC";
         return ejecutarConsulta($sql);
     }
 
     public function listarActivos(){
-        $sql = "SELECT s.idservicio, date(s.fecha) AS fecha, concat(c.nombre, ' ', c.apellido) AS cliente, concat(p.nombre, ' ', p.apellido) AS personal, s.estado 
+        $sql = "SELECT s.idservicio, date(s.fecha) AS fecha, concat(c.nombre, ' ', c.apellido) AS cliente, concat(p.nombre, ' ', p.apellido) AS personal, s.monto, s.estado 
         FROM servicios s JOIN clientes c ON s.idcliente = c.idcliente JOIN personales p ON s.idpersonal = p.idpersonal JOIN sucursales suc ON s.idsucursal = suc.idsucursal 
         WHERE s.estado = '1' ORDER BY s.idservicio DESC";
         return ejecutarConsulta($sql);
     }
+
+    public function listarDetalle2($idservicio){
+        $sql = "SELECT sd.idservicio, sd.idmercaderia, concat(mer.descripcion, ' ',ma.descripcion) as descripcion, sd.cantidad, sd.precio, ti.tipo AS iva 
+        FROM servicios_detalle sd JOIN mercaderias mer ON sd.idmercaderia = mer.idmercaderia JOIN marcas ma ON mer.idmarca = ma.idmarca 
+        JOIN tipo_impuestos ti ON mer.idtipoimpuesto = ti.idtipoimpuesto WHERE sd.precio IS NOT NULL AND sd.idservicio = '$idservicio'";
+        return ejecutarConsulta($sql);
+    }
+
 }
 ?>

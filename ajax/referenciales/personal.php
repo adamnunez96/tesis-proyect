@@ -32,14 +32,24 @@ switch ($_GET["op"]){
         }
 
         if(empty($idpersonal)){
-            $rspta = $personal->insertar($idusuario, $idciudad, $idsucursal, $nombre, $apellido, $documento, $direccion, $telefono, $cargo, $correo, $imagen);
-            echo $rspta ? "Personal registrado" : "Personal no se pudo registrar";
+            $existencia = $personal->validarExistencia($idpersonal, $nombre, $apellido, $documento);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $personal->insertar($idusuario, $idciudad, $idsucursal, $nombre, $apellido, $documento, $direccion, $telefono, $cargo, $correo, $imagen);
+                echo $rspta ? "Personal registrado" : "Personal no se pudo registrar";
+            }
         }else{
-            $rspta = $personal->editar($idpersonal, $idusuario, $idciudad, $idsucursal, $nombre, $apellido, $documento, $direccion, $telefono, $cargo, $correo, $imagen);
-            echo $rspta ? "Personal actualizado" : "Personal no se pudo actualizar";
+            $existencia = $personal->validarExistencia($idpersonal, $nombre, $apellido, $documento);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $personal->editar($idpersonal, $idusuario, $idciudad, $idsucursal, $nombre, $apellido, $documento, $direccion, $telefono, $cargo, $correo, $imagen);
+                echo $rspta ? "Personal actualizado" : "Personal no se pudo actualizar";
+            }
         }
     break;
-
+// 
     case 'desactivar':
         $rspta = $personal->desactivar($idpersonal);
             echo $rspta ? "Personal desactivado" : "Personal no se pudo desactivar";
@@ -105,7 +115,7 @@ switch ($_GET["op"]){
         require_once "../../modelos/referenciales/Ciudad.php";
 
         $ciudad = new Ciudad();
-        $rspta = $ciudad->listar();
+        $rspta = $ciudad->listarActivos();
 
         while($reg = $rspta->fetch_object()){
             echo '<option value =' . $reg->idciudad. '>' . $reg->descripcion . '</option>';

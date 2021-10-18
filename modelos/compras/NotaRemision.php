@@ -56,11 +56,11 @@ class NotaRemision {
     }
 
     //implementar un metodo para listar los registros
-    public function listar(){
+    public function listar($idsucursal){
         $sql = "SELECT n.idnotaremision, date(n.fecha) as fecha, n.idsucursal, s.descripcion AS sucursal, n.iddeposito, 
         d.descripcion as deposito, n.idpersonalrecibe, concat(p.nombre ,' ', p.apellido) AS perrecibe, n.estado 
         FROM nota_remision n JOIN sucursales s ON n.idsucursal = s.idsucursal JOIN personales p ON n.idpersonalrecibe = p.idpersonal 
-        JOIN depositos d ON n.iddeposito = d.iddeposito ORDER BY n.idnotaremision DESC";
+        JOIN depositos d ON n.iddeposito = d.iddeposito WHERE n.idsucursal = '$idsucursal' ORDER BY n.idnotaremision DESC";
         return ejecutarConsulta($sql);
     }
 

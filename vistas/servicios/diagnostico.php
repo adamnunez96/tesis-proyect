@@ -52,7 +52,7 @@
 
                          <div class="form-group col-lg-2 col-md-2 col-sm-6 col-xs-12">
                             <label>idRecepcion:</label>
-                            <input type="text" name="idrecepcion" id="idrecepcion" class="form-control">
+                            <input type="text" name="idrecepcion" id="idrecepcion" class="form-control" readonly>
                           </div>
 
                           <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">

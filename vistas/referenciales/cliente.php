@@ -70,7 +70,7 @@ if(!isset($_SESSION["usuario"])){
                           </div>
 
                           <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label>Ci/RUC</label>  
+                            <label>CI/RUC(*)</label>  
                             <input type="text" class="form-control" name="ci" id="ci" maxlenght="20" placeholder="RUC" required>
                           </div>
 

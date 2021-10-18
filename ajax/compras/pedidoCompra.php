@@ -3,7 +3,7 @@
 if(strlen(session_id())<1)
 session_start();
 
-require_once "../../modelos/compras/pedidoCompra.php";
+require_once "../../modelos/compras/PedidoCompra.php";
 
 $pedidoCompra = new PedidoCompra();
 
@@ -67,7 +67,7 @@ switch ($_GET["op"]){
 
     case 'listar':
         
-        $rspta=$pedidoCompra->listar();
+        $rspta=$pedidoCompra->listar($idsucursal);
         //vamos a declarar una array
         $data = Array();
 
@@ -77,9 +77,12 @@ switch ($_GET["op"]){
                 "1"=>$reg->fecha,
                 "2"=>$reg->personal,
                 "3"=>$reg->sucursal,
-                "4"=>($reg->estado)?'<span class="label bg-green">Aceptado</span>':
-                '<span class="label bg-red">Anulado</span>',
-                "5"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idpedido. ')"><i class="fa fa-eye"></i></button>'. ' <button class="btn btn-danger" onclick="anular(' .$reg->idpedido. ')"><i class="fa fa-close"></i></button>' :
+                /*"4"=>($reg->estado)?'<span class="label bg-green">Aceptado</span>':
+                '<span class="label bg-red">Anulado</span>',*/
+                "4"=>($reg->estado) == 1?'<span class="label bg-green">Aceptado</span>':
+                ($reg->estado == 0 ? '<span class="label bg-red">Anulado</span>':"<span class='label bg-yellow'>Utilizado</span>"),
+                "5"=>($reg->estado) == 1?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idpedido. ')"><i class="fa fa-eye"></i></button>'. 
+                ' <button class="btn btn-danger" onclick="anular(' .$reg->idpedido. ')"><i class="fa fa-close"></i></button>' :
                 '<button class="btn btn-warning" onclick="mostrar(' .$reg->idpedido. ')"><i class="fa fa-eye"></i></button>',
             );
         }

@@ -52,12 +52,13 @@ switch ($_GET["op"]){
                 "1"=>$reg->fecha,
                 "2"=>$reg->cliente,
                 "3"=>$reg->vehiculo,
-                "4"=>($reg->estado)?'<span class="label bg-green">Aceptado</span>':
-                '<span class="label bg-red">Anulado</span>',
-                "5"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idrecepcion. ')"><i class="fa fa-eye"></i></button>'. 
+                "4"=>($reg->estado)==1?'<span class="label bg-green">Aceptado</span>':
+                ($reg->estado==0?'<span class="label bg-red">Anulado</span>': "<span class='label bg-yellow'>Utilizado</span>"),
+                "5"=>($reg->estado)==1?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idrecepcion. ')"><i class="fa fa-eye"></i></button>'. 
                 ' <button class="btn btn-primary" id="btnModificar" onclick="modificar(' .$reg->idrecepcion. ')"><i class="fa fa-pencil"></i></button>'.
                 ' <button class="btn btn-danger" onclick="anular(' .$reg->idrecepcion. ')"><i class="fa fa-close"></i></button>' :
-                '<button class="btn btn-warning" onclick="mostrar(' .$reg->idrecepcion. ')"><i class="fa fa-eye"></i></button>'
+                ($reg->estado==0?'<button class="btn btn-warning" onclick="mostrar(' .$reg->idrecepcion. ')"><i class="fa fa-eye"></i></button>':
+                '<button class="btn btn-warning" onclick="mostrar(' .$reg->idrecepcion. ')"><i class="fa fa-eye"></i></button>')
             );
         }
         $results = array(

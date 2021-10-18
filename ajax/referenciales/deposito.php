@@ -10,17 +10,32 @@ $descripcion = isset($_POST["descripcion"])? limpiarCadena($_POST["descripcion"]
 switch ($_GET["op"]){
     case 'guardaryeditar':
         if(empty($iddeposito)){
-            $rspta = $deposito->insertar($idsucursal, $descripcion);
-            echo $rspta ? "Deposito registrado" : "Deposito no se pudo registrar";
+            $existencia = $deposito->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $deposito->insertar($idsucursal, $descripcion);
+                echo $rspta ? "Deposito registrado" : "Deposito no se pudo registrar";
+            }
         }else{
-            $rspta = $deposito->editar($iddeposito, $idsucursal, $descripcion);
-            echo $rspta ? "Deposito actualizado" : "Deposito no se pudo actualizar";
+            $existencia = $deposito->validarExistencia($descripcion);
+            if($existencia > 0){
+                echo "Ya existe un registro con esta descripcion. Favor verificar";
+            }else{
+                $rspta = $deposito->editar($iddeposito, $idsucursal, $descripcion);
+                echo $rspta ? "Deposito actualizado" : "Deposito no se pudo actualizar";
+            }
         }
     break;
 
     case 'eliminar':
         $rspta = $deposito->eliminar($iddeposito);
-            echo $rspta ? "Deposito eliminado" : "Deposito no se pudo eliminar";
+            echo $rspta ? "Deposito desactivado" : "Deposito no se pudo desactivado";
+    break;
+
+    case 'activar':
+        $rspta = $deposito->activar($iddeposito);
+        echo $rspta ? "Deposito Activado" : "Deposito no se pudo Activar";
     break;
 
     case 'mostrar':
@@ -41,7 +56,12 @@ switch ($_GET["op"]){
                 "0"=>$reg->iddeposito,
                 "1"=>$reg->descripcion,
                 "2"=>$reg->sucursal,
-                "3"=>'<button class="btn btn-warning" onclick="mostrar(' .$reg->iddeposito. ')"><i class="fa fa-pencil"></i></button>'. ' <button class="btn btn-danger" onclick="eliminar(' .$reg->iddeposito. ')"><i class="fa fa-trash"></i></button>'
+                "3"=>($reg->estado)?'<span class="label bg-green">Activado</span>':
+                '<span class="label bg-red">Desactivado</span>',
+                "4"=>($reg->estado)?'<button class="btn btn-warning" onclick="mostrar(' .$reg->iddeposito. ')"><i class="fa fa-pencil"></i></button>'. 
+                ' <button class="btn btn-danger" onclick="eliminar(' .$reg->iddeposito. ')"><i class="fa fa-trash"></i></button>':
+                '<button class="btn btn-warning" onclick="mostrar(' .$reg->iddeposito. ')"><i class="fa fa-pencil"></i></button>'. 
+                ' <button class="btn btn-primary" onclick="activar(' .$reg->iddeposito. ')"><i class="fa fa-check"></i></button>'
             );
         }
         $results = array(
